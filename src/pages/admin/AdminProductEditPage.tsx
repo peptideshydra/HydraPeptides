@@ -5,30 +5,37 @@ import { supabase, type ProductRow, type ProductDetailRow, type Variation, type 
 
 const CATEGORIES = ['All Peptides', 'Tablets', 'Cosmetics and Topicals']
 
-const emptyVial: VialOption = { label: '', price: 0, discount: null, in_stock: true }
-const emptyVariation: Variation = { dosage: '', vials: [{ ...emptyVial }] }
+type FormVialOption = Omit<VialOption, 'price'> & { price: number | string }
+type FormVariation = Omit<Variation, 'vials'> & { vials: FormVialOption[] }
+const emptyVial: FormVialOption = { label: '', price: '', discount: null, in_stock: true }
+const emptyVariation: FormVariation = { dosage: '', vials: [{ ...emptyVial }] }
 
 interface FormData {
   name: string
   slug: string
   dosage: string
-  price: number
-  old_price: number | null
+  price: string
+  old_price: string
   sale_badge: string
   tag: string
   tested: boolean
   image: string
   category: string
-  rating: number
-  review_count: number
+  rating: string
+  review_count: string
   price_per_unit: string
   in_stock: boolean
   featured: boolean
   is_new: boolean
   is_bestseller: boolean
   show_in_shop: boolean
-  sort_order: number
-  variations: Variation[]
+  sort_order: string
+  variations: FormVariation[]
+}
+
+function toNum(s: string): number {
+  const n = parseFloat(s)
+  return isNaN(n) ? 0 : n
 }
 
 interface DetailsData {
@@ -47,13 +54,18 @@ function getStorageUrl(path: string) {
   return `${url}/storage/v1/object/public/product-images/${path}`
 }
 
-function Input({ label, ...props }: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
+const inputBaseClass = 'w-full h-10 px-3 rounded-lg bg-[#0f1117] border border-[#2a2d37] text-white font-primary text-[14px] outline-none focus:border-[#16A1C5] transition-colors disabled:opacity-50'
+const noSpinnerClass = '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+
+function Input({ label, type, className = '', ...props }: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
+  const isNumber = type === 'number'
   return (
     <div>
       <label className="block text-[12px] text-[#6B7785] mb-1 font-primary">{label}</label>
       <input
+        type={type}
         {...props}
-        className="w-full h-10 px-3 rounded-lg bg-[#0f1117] border border-[#2a2d37] text-white font-primary text-[14px] outline-none focus:border-[#16A1C5] transition-colors disabled:opacity-50"
+        className={`${inputBaseClass} ${isNumber ? noSpinnerClass : ''} ${className}`}
       />
     </div>
   )
@@ -91,10 +103,10 @@ export default function AdminProductEditPage() {
   const isNew = id === 'new'
 
   const [form, setForm] = useState<FormData>({
-    name: '', slug: '', dosage: '', price: 0, old_price: null, sale_badge: '', tag: '',
-    tested: false, image: '', category: 'All Peptides', rating: 5, review_count: 0,
+    name: '', slug: '', dosage: '', price: '', old_price: '', sale_badge: '', tag: '',
+    tested: false, image: '', category: 'All Peptides', rating: '5', review_count: '0',
     price_per_unit: '', in_stock: true, featured: false, is_new: false, is_bestseller: false,
-    show_in_shop: true, sort_order: 0, variations: [],
+    show_in_shop: true, sort_order: '0', variations: [],
   })
 
   const [details, setDetails] = useState<DetailsData>({
@@ -115,13 +127,17 @@ export default function AdminProductEditPage() {
     if (p) {
       const prod = p as ProductRow
       setForm({
-        name: prod.name, slug: prod.slug, dosage: prod.dosage ?? '', price: prod.price,
-        old_price: prod.old_price, sale_badge: prod.sale_badge ?? '', tag: prod.tag ?? '',
+        name: prod.name, slug: prod.slug, dosage: prod.dosage ?? '', price: String(prod.price ?? ''),
+        old_price: prod.old_price != null ? String(prod.old_price) : '', sale_badge: prod.sale_badge ?? '', tag: prod.tag ?? '',
         tested: prod.tested, image: prod.image, category: prod.category,
-        rating: prod.rating, review_count: prod.review_count, price_per_unit: prod.price_per_unit ?? '',
+        rating: String(prod.rating ?? '5'), review_count: String(prod.review_count ?? '0'), price_per_unit: prod.price_per_unit ?? '',
         in_stock: prod.in_stock, featured: prod.featured, is_new: prod.is_new,
         is_bestseller: prod.is_bestseller, show_in_shop: prod.show_in_shop,
-        sort_order: prod.sort_order, variations: prod.variations ?? [],
+        sort_order: String(prod.sort_order ?? '0'),
+        variations: (prod.variations ?? []).map((v: Variation) => ({
+          ...v,
+          vials: v.vials.map((vial) => ({ ...vial, price: String(vial.price) })),
+        })),
       })
     }
 
@@ -177,23 +193,26 @@ export default function AdminProductEditPage() {
       name: form.name,
       slug: form.slug,
       dosage: form.dosage || null,
-      price: form.price,
-      old_price: form.old_price || null,
+      price: toNum(form.price),
+      old_price: form.old_price ? toNum(form.old_price) : null,
       sale_badge: form.sale_badge || null,
       tag: form.tag || null,
       tested: form.tested,
       image: form.image,
       category: form.category,
-      rating: form.rating,
-      review_count: form.review_count,
+      rating: toNum(form.rating),
+      review_count: toNum(form.review_count),
       price_per_unit: form.price_per_unit || null,
       in_stock: form.in_stock,
       featured: form.featured,
       is_new: form.is_new,
       is_bestseller: form.is_bestseller,
       show_in_shop: form.show_in_shop,
-      sort_order: form.sort_order,
-      variations: form.variations,
+      sort_order: toNum(form.sort_order),
+      variations: form.variations.map((v) => ({
+        ...v,
+        vials: v.vials.map((vial) => ({ ...vial, price: typeof vial.price === 'string' ? toNum(vial.price) : vial.price })),
+      })),
     }
 
     let productId = id
@@ -255,7 +274,7 @@ export default function AdminProductEditPage() {
     v[vi] = { ...v[vi], vials: v[vi].vials.filter((_, i) => i !== vii) }
     update('variations', v)
   }
-  function updateVial(vi: number, vii: number, key: keyof VialOption, val: string | number | boolean | null) {
+  function updateVial(vi: number, vii: number, key: keyof FormVialOption, val: string | number | boolean | null) {
     const v = [...form.variations]
     const vials = [...v[vi].vials]
     vials[vii] = { ...vials[vii], [key]: val }
@@ -315,17 +334,14 @@ export default function AdminProductEditPage() {
               {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
-          <Input label="Price ($)" type="number" step="0.01" value={form.price} onChange={(e) => update('price', Number((e.target as HTMLInputElement).value))} />
-          <Input label="Old Price ($)" type="number" step="0.01" value={form.old_price ?? ''} onChange={(e) => {
-            const v = (e.target as HTMLInputElement).value
-            update('old_price', v ? Number(v) : null)
-          }} />
+          <Input label="Price ($)" type="number" step="0.01" value={form.price} onChange={(e) => update('price', (e.target as HTMLInputElement).value)} />
+          <Input label="Old Price ($)" type="number" step="0.01" value={form.old_price} onChange={(e) => update('old_price', (e.target as HTMLInputElement).value)} />
           <Input label="Sale Badge" placeholder="e.g. 17% OFF" value={form.sale_badge} onChange={(e) => update('sale_badge', (e.target as HTMLInputElement).value)} />
           <Input label="Tag" placeholder="e.g. New" value={form.tag} onChange={(e) => update('tag', (e.target as HTMLInputElement).value)} />
           <Input label="Price per unit" placeholder="e.g. 5.06 €/1mg" value={form.price_per_unit} onChange={(e) => update('price_per_unit', (e.target as HTMLInputElement).value)} />
-          <Input label="Sort Order" type="number" value={form.sort_order} onChange={(e) => update('sort_order', Number((e.target as HTMLInputElement).value))} />
-          <Input label="Rating" type="number" step="0.1" min="0" max="5" value={form.rating} onChange={(e) => update('rating', Number((e.target as HTMLInputElement).value))} />
-          <Input label="Review Count" type="number" value={form.review_count} onChange={(e) => update('review_count', Number((e.target as HTMLInputElement).value))} />
+          <Input label="Sort Order" type="number" value={form.sort_order} onChange={(e) => update('sort_order', (e.target as HTMLInputElement).value)} />
+          <Input label="Rating" type="number" step="0.1" min="0" max="5" value={form.rating} onChange={(e) => update('rating', (e.target as HTMLInputElement).value)} />
+          <Input label="Review Count" type="number" value={form.review_count} onChange={(e) => update('review_count', (e.target as HTMLInputElement).value)} />
         </div>
         <div className="flex flex-wrap gap-x-6 gap-y-3 mt-5">
           <Toggle label="In Stock" checked={form.in_stock} onChange={(v) => update('in_stock', v)} />
@@ -398,8 +414,8 @@ export default function AdminProductEditPage() {
                     onChange={(e) => updateVial(vi, vii, 'label', e.target.value)}
                     className="flex-1 h-9 px-3 rounded-lg bg-[#1a1d27] border border-[#2a2d37] text-white font-primary text-[13px] outline-none focus:border-[#16A1C5]" />
                   <input placeholder="Price" type="number" step="0.01" value={vial.price}
-                    onChange={(e) => updateVial(vi, vii, 'price', Number(e.target.value))}
-                    className="w-24 h-9 px-3 rounded-lg bg-[#1a1d27] border border-[#2a2d37] text-white font-primary text-[13px] outline-none focus:border-[#16A1C5]" />
+                    onChange={(e) => updateVial(vi, vii, 'price', e.target.value)}
+                    className={`w-24 h-9 px-3 rounded-lg bg-[#1a1d27] border border-[#2a2d37] text-white font-primary text-[13px] outline-none focus:border-[#16A1C5] ${noSpinnerClass}`} />
                   <input placeholder="Discount" value={vial.discount ?? ''}
                     onChange={(e) => updateVial(vi, vii, 'discount', e.target.value || null)}
                     className="w-20 h-9 px-3 rounded-lg bg-[#1a1d27] border border-[#2a2d37] text-white font-primary text-[13px] outline-none focus:border-[#16A1C5]" />

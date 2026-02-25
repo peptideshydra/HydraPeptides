@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Block admin, checkout, and order-received pages
+Disallow: /admin/
+Disallow: /admin/login
+Disallow: /my-account
+Disallow: /my-account/
+Disallow: /checkout/
+Disallow: /checkout/order-received/
+Disallow: /wishlist/
+
+Sitemap: https://beyondpeptides.com/sitemap.xml
