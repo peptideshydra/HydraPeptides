@@ -1,0 +1,85 @@
+import { useState } from 'react';
+
+interface Category {
+  name: string;
+  count: number;
+  image: string;
+  link: string;
+}
+
+const categories: Category[] = [
+  {
+    name: 'Peptides',
+    count: 22,
+    image: 'https://beyond-peptides.com/wp-content/uploads/2025/10/Peptide-Bottle.webp',
+    link: '/product-category/peptide-products/',
+  },
+  {
+    name: 'Tablets',
+    count: 4,
+    image: 'https://beyond-peptides.com/wp-content/uploads/2025/10/Tablets.webp',
+    link: '/product-category/tablets/',
+  },
+  {
+    name: 'Cosmetics and Topicals',
+    count: 2,
+    image: 'https://beyond-peptides.com/wp-content/uploads/2025/10/Cosmetics-and-Topicals.webp',
+    link: '/product-category/cosmetics-tropicals/',
+  },
+];
+
+function CategoryCard({ category }: { category: Category }) {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <a
+      href={category.link}
+      className="group flex flex-col rounded-2xl overflow-hidden border border-transparent transition-all duration-300"
+      style={{
+        background: '#f8f9fa',
+        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
+        boxShadow: hovered ? '0 8px 30px rgba(0,0,0,0.06)' : 'none',
+        borderColor: hovered ? '#e5e7eb' : 'transparent',
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div className="flex items-center justify-center px-6 pt-8 pb-4">
+        <img
+          src={category.image}
+          alt={category.name}
+          className="w-full max-w-[200px] h-auto object-contain transition-transform duration-300"
+          style={{ transform: hovered ? 'scale(1.05)' : 'scale(1)' }}
+          loading="lazy"
+        />
+      </div>
+
+      <div className="text-center px-6 pb-8 pt-2">
+        <h4 className="font-primary text-[16px] font-semibold text-[#0F172A] mb-1">
+          {category.name}
+        </h4>
+        <span className="text-[13px] text-[#8494A6]">
+          {category.count} Products
+        </span>
+      </div>
+    </a>
+  );
+}
+
+export default function Categories() {
+  return (
+    <section className="py-[60px] px-[60px] text-center" style={{ background: '#f8f9fa' }}>
+      <div className="mx-auto max-w-[1320px]">
+        <h2 className="font-primary font-bold text-[28px] text-[#0F172A] mb-10">
+          High-Purity Compounds for Every Study
+        </h2>
+
+        <div className="grid grid-cols-3 gap-4 max-w-[900px] mx-auto max-[900px]:grid-cols-2 max-[480px]:grid-cols-1">
+          {categories.map((cat) => (
+            <CategoryCard key={cat.name} category={cat} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
