@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import { useProducts } from '../hooks/useProducts';
 
 interface Category {
   name: string;
-  count: number;
+  dbCategory: string;
   image: string;
   link: string;
 }
@@ -10,25 +11,25 @@ interface Category {
 const categories: Category[] = [
   {
     name: 'Peptides',
-    count: 22,
+    dbCategory: 'All Peptides',
     image: 'https://beyond-peptides.com/wp-content/uploads/2025/10/Peptide-Bottle.webp',
     link: '/product-category/peptide-products/',
   },
   {
     name: 'Tablets',
-    count: 4,
+    dbCategory: 'Tablets',
     image: 'https://beyond-peptides.com/wp-content/uploads/2025/10/Tablets.webp',
     link: '/product-category/tablets/',
   },
   {
     name: 'Cosmetics and Topicals',
-    count: 2,
+    dbCategory: 'Cosmetics and Topicals',
     image: 'https://beyond-peptides.com/wp-content/uploads/2025/10/Cosmetics-and-Topicals.webp',
     link: '/product-category/cosmetics-tropicals/',
   },
 ];
 
-function CategoryCard({ category }: { category: Category }) {
+function CategoryCard({ category, count }: { category: Category; count: number | null }) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -59,7 +60,7 @@ function CategoryCard({ category }: { category: Category }) {
           {category.name}
         </h4>
         <span className="text-[13px] text-[#8494A6]">
-          {category.count} Products
+          {count === null ? '…' : `${count} Products`}
         </span>
       </div>
     </a>
@@ -67,6 +68,11 @@ function CategoryCard({ category }: { category: Category }) {
 }
 
 export default function Categories() {
+  const { products } = useProducts();
+
+  const countFor = (dbCat: string) =>
+    products.length === 0 ? null : products.filter((p) => p.category === dbCat).length;
+
   return (
     <section className="py-[60px] px-[60px] text-center" style={{ background: '#f8f9fa' }}>
       <div className="mx-auto max-w-[1320px]">
@@ -76,7 +82,7 @@ export default function Categories() {
 
         <div className="grid grid-cols-3 gap-4 max-w-[900px] mx-auto max-[900px]:grid-cols-2 max-[480px]:grid-cols-1">
           {categories.map((cat) => (
-            <CategoryCard key={cat.name} category={cat} />
+            <CategoryCard key={cat.name} category={cat} count={countFor(cat.dbCategory)} />
           ))}
         </div>
       </div>

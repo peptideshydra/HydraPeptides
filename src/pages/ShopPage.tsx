@@ -107,22 +107,23 @@ const cartIconSvg = (
   </svg>
 )
 
-function PriceSlider() {
-  const [min, setMin] = useState(0)
-  const [max, setMax] = useState(519)
+interface PriceSliderProps {
+  min: number; max: number; absMax: number
+  onMinChange: (v: number) => void; onMaxChange: (v: number) => void
+}
+
+function PriceSlider({ min, max, absMax, onMinChange, onMaxChange }: PriceSliderProps) {
   const trackRef = useRef<HTMLDivElement>(null)
-  const left = (min / 519) * 100
-  const right = 100 - (max / 519) * 100
+  const left = (min / absMax) * 100
+  const right = 100 - (max / absMax) * 100
 
   const handleMin = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const v = Math.min(Number(e.target.value), max)
-    setMin(v)
-  }, [max])
+    onMinChange(Math.min(Number(e.target.value), max))
+  }, [max, onMinChange])
 
   const handleMax = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const v = Math.max(Number(e.target.value), min)
-    setMax(v)
-  }, [min])
+    onMaxChange(Math.max(Number(e.target.value), min))
+  }, [min, onMaxChange])
 
   return (
     <div>
@@ -130,15 +131,15 @@ function PriceSlider() {
         <div className="absolute h-full rounded bg-[#16A1C5]" style={{ left: `${left}%`, right: `${right}%` }} />
       </div>
       <div className="relative h-5">
-        <input type="range" min={0} max={519} value={min} onChange={handleMin} className="price-range-input" />
-        <input type="range" min={0} max={519} value={max} onChange={handleMax} className="price-range-input" />
+        <input type="range" min={0} max={absMax} value={min} onChange={handleMin} className="price-range-input" />
+        <input type="range" min={0} max={absMax} value={max} onChange={handleMax} className="price-range-input" />
       </div>
       <div className="flex items-center gap-4 mt-2">
         <div className="flex items-center border border-[#DBDFE5] rounded-lg overflow-hidden">
           <input
             type="text"
             value={min}
-            onChange={(e) => setMin(Math.min(Number(e.target.value) || 0, max))}
+            onChange={(e) => onMinChange(Math.min(Number(e.target.value) || 0, max))}
             className="w-16 px-2 py-1.5 text-sm font-medium text-[#22282F] outline-none font-primary"
           />
           <span className="pr-2 text-sm text-[#8494A6] font-primary">€</span>
@@ -148,7 +149,7 @@ function PriceSlider() {
           <input
             type="text"
             value={max}
-            onChange={(e) => setMax(Math.max(Number(e.target.value) || 0, min))}
+            onChange={(e) => onMaxChange(Math.max(Number(e.target.value) || 0, min))}
             className="w-16 px-2 py-1.5 text-sm font-medium text-[#22282F] outline-none font-primary"
           />
           <span className="pr-2 text-sm text-[#8494A6] font-primary">€</span>
@@ -273,15 +274,66 @@ function ProductCard({ product }: { product: ProductRow }) {
   )
 }
 
+// Maps UI category labels to product fields
+function matchesCat(p: ProductRow, cat: string): boolean {
+  if (cat === 'All Peptides')           return p.category === 'All Peptides'
+  if (cat === 'Peptide Products')       return p.category === 'All Peptides'
+  if (cat === 'Tablets')                return p.category === 'Tablets'
+  if (cat === 'Cosmetics and Topicals') return p.category === 'Cosmetics and Topicals'
+  if (cat === 'Bestseller')             return p.is_bestseller
+  if (cat === 'New Products')           return p.is_new
+  return false
+}
+
 export default function ShopPage() {
   const { products, loading } = useShopProducts()
   const [selectedCats, setSelectedCats] = useState<string[]>([])
+  const [tagNew, setTagNew] = useState(false)
+  const [sortBy, setSortBy] = useState('')
+  const [cols, setCols] = useState(3)
+
+  // Dynamic price ceiling from actual products
+  const absMax = products.length ? Math.ceil(Math.max(...products.map(p => p.price))) : 519
+  const [priceMin, setPriceMin] = useState(0)
+  const [priceMax, setPriceMax] = useState(519)
+  // Expand ceiling when products load
+  const effectivePriceMax = Math.max(priceMax, absMax)
 
   const toggleCat = (cat: string) => {
     setSelectedCats((prev) =>
       prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
     )
   }
+
+  // ── Filtering ──────────────────────────────────────────────────────────────
+  let filtered = products
+
+  if (selectedCats.length > 0) {
+    filtered = filtered.filter(p => selectedCats.some(cat => matchesCat(p, cat)))
+  }
+
+  if (tagNew) {
+    filtered = filtered.filter(p => p.is_new)
+  }
+
+  filtered = filtered.filter(p => p.price >= priceMin && p.price <= effectivePriceMax)
+
+  // ── Sorting ────────────────────────────────────────────────────────────────
+  if (sortBy === 'Name') {
+    filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name))
+  } else if (sortBy === 'Price') {
+    filtered = [...filtered].sort((a, b) => a.price - b.price)
+  } else if (sortBy === 'Top Seller') {
+    filtered = [...filtered].sort((a, b) => (b.is_bestseller ? 1 : 0) - (a.is_bestseller ? 1 : 0))
+  } else if (sortBy === 'Top Rated') {
+    filtered = [...filtered].sort((a, b) => b.rating - a.rating)
+  } else if (sortBy === 'Date') {
+    filtered = [...filtered].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+  }
+
+  const gridCols = cols === 2 ? 'grid-cols-2' : cols === 4 ? 'grid-cols-2 md:grid-cols-4' : 'grid-cols-2 md:grid-cols-3'
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const activeFilterCount = selectedCats.length + (tagNew ? 1 : 0) + (priceMin > 0 || priceMax < absMax ? 1 : 0)
 
   return (
     <>
@@ -312,11 +364,22 @@ export default function ShopPage() {
             </FilterAccordion>
 
             <FilterAccordion title="Price">
-              <PriceSlider />
+              <PriceSlider
+                min={priceMin}
+                max={Math.min(priceMax, absMax)}
+                absMax={absMax}
+                onMinChange={setPriceMin}
+                onMaxChange={setPriceMax}
+              />
             </FilterAccordion>
 
             <FilterAccordion title="Tags">
-              <button className="font-primary text-[13px] px-3 py-2 rounded-lg text-[#444B53] hover:bg-[#f4f5f7] transition-colors">
+              <button
+                onClick={() => setTagNew(v => !v)}
+                className={`font-primary text-[13px] px-3 py-2 rounded-lg transition-colors ${
+                  tagNew ? 'bg-[#16A1C5] text-white' : 'text-[#444B53] hover:bg-[#f4f5f7]'
+                }`}
+              >
                 New
               </button>
             </FilterAccordion>
@@ -324,27 +387,147 @@ export default function ShopPage() {
 
           {/* Products */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between mb-6">
-              <p className="font-primary text-[14px] text-[#444B53] font-medium">
-                {products.length} Products
+            <div className="flex items-center justify-between mb-6 gap-2">
+              <p className="font-primary text-[14px] text-[#444B53] font-medium shrink-0">
+                {loading ? '…' : `${filtered.length} Products`}
               </p>
-              <div className="hidden sm:flex items-center gap-3">
-                <select defaultValue="" className="font-primary text-[13px] text-[#444B53] border border-[#DBDFE5] rounded-lg px-3 py-2 outline-none bg-white cursor-pointer">
-                  <option value="" disabled>Sort By</option>
-                  <option>Date</option>
-                  <option>Name</option>
-                  <option>Price</option>
-                  <option>Top Seller</option>
-                  <option>Top Rated</option>
+              <div className="flex items-center gap-2">
+                {/* Mobile: Sort + Filter buttons */}
+                <select
+                  value={sortBy}
+                  onChange={e => setSortBy(e.target.value)}
+                  className="lg:hidden font-primary text-[12px] text-[#444B53] border border-[#DBDFE5] rounded-lg px-2 py-1.5 outline-none bg-white cursor-pointer"
+                >
+                  <option value="">Sort</option>
+                  <option value="Date">Date</option>
+                  <option value="Name">Name</option>
+                  <option value="Price">Price</option>
+                  <option value="Top Seller">Top Seller</option>
+                  <option value="Top Rated">Top Rated</option>
                 </select>
-                <select defaultValue="" className="font-primary text-[13px] text-[#444B53] border border-[#DBDFE5] rounded-lg px-3 py-2 outline-none bg-white cursor-pointer">
-                  <option value="" disabled>View</option>
-                  <option>2 Products per Row</option>
-                  <option>3 Products per Row</option>
-                  <option>4 Products per Row</option>
-                </select>
+                <button
+                  onClick={() => setMobileFiltersOpen(true)}
+                  className="lg:hidden relative flex items-center gap-1.5 font-primary text-[12px] font-semibold text-[#444B53] border border-[#DBDFE5] rounded-lg px-3 py-1.5 bg-white transition-colors hover:border-[#16A1C5] hover:text-[#16A1C5]"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/>
+                  </svg>
+                  Filters
+                  {activeFilterCount > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-[#16A1C5] text-white text-[10px] font-semibold flex items-center justify-center">
+                      {activeFilterCount}
+                    </span>
+                  )}
+                </button>
+
+                {/* Desktop: Sort + View selects */}
+                <div className="hidden lg:flex items-center gap-3">
+                  <select
+                    value={sortBy}
+                    onChange={e => setSortBy(e.target.value)}
+                    className="font-primary text-[13px] text-[#444B53] border border-[#DBDFE5] rounded-lg px-3 py-2 outline-none bg-white cursor-pointer"
+                  >
+                    <option value="">Sort By</option>
+                    <option value="Date">Date</option>
+                    <option value="Name">Name</option>
+                    <option value="Price">Price</option>
+                    <option value="Top Seller">Top Seller</option>
+                    <option value="Top Rated">Top Rated</option>
+                  </select>
+                  <select
+                    value={cols}
+                    onChange={e => setCols(Number(e.target.value))}
+                    className="font-primary text-[13px] text-[#444B53] border border-[#DBDFE5] rounded-lg px-3 py-2 outline-none bg-white cursor-pointer"
+                  >
+                    <option value={2}>2 per Row</option>
+                    <option value={3}>3 per Row</option>
+                    <option value={4}>4 per Row</option>
+                  </select>
+                </div>
               </div>
             </div>
+
+            {/* ── Mobile filter sheet ── */}
+            {mobileFiltersOpen && (
+              <>
+                <div
+                  className="fixed inset-0 z-[9990] bg-black/40 lg:hidden"
+                  onClick={() => setMobileFiltersOpen(false)}
+                />
+                <div className="fixed bottom-0 left-0 right-0 z-[9991] bg-white rounded-t-2xl shadow-2xl lg:hidden flex flex-col max-h-[80vh]">
+                  {/* Sheet header */}
+                  <div className="flex items-center justify-between px-5 py-4 border-b border-[#e5e7eb] shrink-0">
+                    <span className="font-primary font-semibold text-[16px] text-[#22282F]">Filters</span>
+                    <div className="flex items-center gap-3">
+                      {activeFilterCount > 0 && (
+                        <button
+                          onClick={() => { setSelectedCats([]); setTagNew(false); setPriceMin(0); setPriceMax(absMax) }}
+                          className="font-primary text-[13px] text-[#16A1C5] font-semibold"
+                        >
+                          Clear all
+                        </button>
+                      )}
+                      <button
+                        onClick={() => setMobileFiltersOpen(false)}
+                        className="w-8 h-8 flex items-center justify-center rounded-full border border-[#e5e7eb] text-[#5B6775] hover:bg-[#f4f5f7] transition-colors"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 18 18" fill="none">
+                          <path d="M4.5 13.5L13.5 4.5M4.5 4.5L13.5 13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  {/* Sheet body */}
+                  <div className="overflow-y-auto px-5 py-2 flex-1">
+                    <FilterAccordion title="Categories" defaultOpen>
+                      <div className="flex flex-wrap gap-2">
+                        {categories.map((cat) => (
+                          <button
+                            key={cat}
+                            onClick={() => toggleCat(cat)}
+                            className={`font-primary text-[13px] px-3 py-1.5 rounded-full border transition-colors ${
+                              selectedCats.includes(cat)
+                                ? 'bg-[#16A1C5] text-white border-[#16A1C5]'
+                                : 'text-[#444B53] border-[#DBDFE5] hover:border-[#16A1C5]'
+                            }`}
+                          >
+                            {cat}
+                          </button>
+                        ))}
+                      </div>
+                    </FilterAccordion>
+                    <FilterAccordion title="Price">
+                      <PriceSlider
+                        min={priceMin}
+                        max={Math.min(priceMax, absMax)}
+                        absMax={absMax}
+                        onMinChange={setPriceMin}
+                        onMaxChange={setPriceMax}
+                      />
+                    </FilterAccordion>
+                    <FilterAccordion title="Tags">
+                      <button
+                        onClick={() => setTagNew(v => !v)}
+                        className={`font-primary text-[13px] px-3 py-1.5 rounded-full border transition-colors ${
+                          tagNew ? 'bg-[#16A1C5] text-white border-[#16A1C5]' : 'text-[#444B53] border-[#DBDFE5] hover:border-[#16A1C5]'
+                        }`}
+                      >
+                        New
+                      </button>
+                    </FilterAccordion>
+                  </div>
+                  {/* Apply button */}
+                  <div className="px-5 py-4 border-t border-[#e5e7eb] shrink-0">
+                    <button
+                      onClick={() => setMobileFiltersOpen(false)}
+                      className="w-full py-3 rounded-xl bg-[#16A1C5] text-white font-primary font-semibold text-[15px] hover:bg-[#1291b3] transition-colors"
+                    >
+                      Show {filtered.length} Products
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
 
             {loading ? (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
@@ -352,19 +535,19 @@ export default function ShopPage() {
                   <div key={i} className="h-[350px] bg-[#e5e7eb] rounded-2xl animate-pulse" />
                 ))}
               </div>
+            ) : filtered.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-20 text-center">
+                <p className="font-primary text-[16px] font-semibold text-[#22282F] mb-2">No products found</p>
+                <p className="font-primary text-[14px] text-[#8494A6]">Try adjusting your filters.</p>
+              </div>
             ) : (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
-                {products.map((product) => (
+              <div className={`grid ${gridCols} gap-5`}>
+                {filtered.map((product) => (
                   <ProductCard key={product.slug} product={product} />
                 ))}
               </div>
             )}
 
-            <div className="flex justify-center mt-10">
-              <button className="font-primary font-semibold text-[14px] text-[#16A1C5] border-2 border-[#16A1C5] rounded-lg px-8 py-3 hover:bg-[#16A1C5] hover:text-white transition-colors">
-                Load More
-              </button>
-            </div>
           </div>
         </div>
       </section>

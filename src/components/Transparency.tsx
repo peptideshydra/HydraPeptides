@@ -1,139 +1,28 @@
 import { useState } from 'react';
+import { useProducts } from '../hooks/useProducts';
 
 interface BatchInfo {
   batchNumber: string;
   certificateUrl?: string;
 }
 
-interface ProductCert {
-  name: string;
-  link: string;
-  batches: BatchInfo[];
-}
-
-const products: ProductCert[] = [
-  { name: 'GLOW', link: '/product/glow/', batches: [] },
-  { name: 'KPV', link: '/product/kp/', batches: [] },
-  { name: 'Tesamorelin', link: '/product/tesa/', batches: [] },
-  { name: 'VIP', link: '/product/vi/', batches: [] },
-  { name: 'NAD+', link: '/product/nad/', batches: [] },
-  { name: 'KLOW', link: '/product/klo/', batches: [] },
-  { name: 'BeyondC', link: '/product/beyondc/', batches: [] },
-  { name: 'Beyond Skin', link: '/product/beyond-skin/', batches: [] },
-  { name: 'Beyond Hair', link: '/product/beyond-hair/', batches: [] },
-  { name: 'Thymosin Alpha 1', link: '/product/thymosin/', batches: [] },
-  { name: 'AOD 9604', link: '/product/aod-9604/', batches: [] },
-  { name: 'Bacteriostatic Water', link: '/product/bac/', batches: [] },
-  { name: 'Beyond Gut Pro', link: '/product/gut-pro/', batches: [] },
-  { name: 'Methylene Blue', link: '/product/mb/', batches: [] },
-  {
-    name: 'SLU-PP-332',
-    link: '/product/slu-pp-332/',
-    batches: [
-      { batchNumber: '001', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2025/06/Certificate_SLU.pdf' },
-    ],
-  },
-  { name: '5-Amino-1MQ', link: '/product/5-a1mq/', batches: [] },
-  { name: 'L-Carnitine', link: '/product/l-carnitine/', batches: [] },
-  { name: 'Beyond Sleep', link: '/product/beyond-sleep/', batches: [] },
-  { name: 'BeyondG', link: '/product/beyondg/', batches: [] },
-  {
-    name: 'MOTS-C',
-    link: '/product/mots-c/',
-    batches: [
-      { batchNumber: '002', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2025/06/Certificate_MOTSc.pdf' },
-    ],
-  },
-  {
-    name: 'SS-31',
-    link: '/product/ss-31/',
-    batches: [
-      { batchNumber: '002', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2025/06/Certificate_SS31.pdf' },
-    ],
-  },
-  {
-    name: 'TB-500',
-    link: '/product/tb-500/',
-    batches: [
-      { batchNumber: '001', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/Certificate_Tb500-10mg.pdf' },
-    ],
-  },
-  { name: 'HCG', link: '/product/hcg/', batches: [] },
-  {
-    name: 'IGF-1 LR3',
-    link: '/product/igf-1-lr3/',
-    batches: [
-      { batchNumber: '', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/BP-Certificate-1_17_Igf-1.pdf' },
-    ],
-  },
-  {
-    name: 'BPC-157',
-    link: '/product/bpc-157/',
-    batches: [
-      { batchNumber: '002', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/Certificate_BPC.pdf' },
-    ],
-  },
-  {
-    name: 'BPC-157 & TB-500 Mix',
-    link: '/product/bpc-157-tb-500-mix/',
-    batches: [
-      { batchNumber: '002', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/Certificate_BP-TBmix.pdf' },
-    ],
-  },
-  {
-    name: 'Ipamorelin',
-    link: '/product/ipamorelin/',
-    batches: [
-      { batchNumber: '001', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/Certificate_IPA.pdf' },
-    ],
-  },
-  {
-    name: 'MT2 (Melanotan II)',
-    link: '/product/mt2-melanotan-ii/',
-    batches: [
-      { batchNumber: '002', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/Certificate_MT.pdf' },
-    ],
-  },
-  { name: 'HGH Fragment 176-191', link: '/product/hgh-fragment-176-191/', batches: [] },
-  {
-    name: 'GHK-Cu',
-    link: '/product/ghk-cu/',
-    batches: [
-      { batchNumber: '5/26/2027', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/GHK-CU.pdf' },
-    ],
-  },
-  {
-    name: 'DSIP',
-    link: '/product/dsip/',
-    batches: [
-      { batchNumber: '001', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/Certificate_DSIP.pdf' },
-    ],
-  },
-  { name: 'Epithalon', link: '/product/epithalon/', batches: [] },
-  {
-    name: 'Oxytocin',
-    link: '/product/oxytocin/',
-    batches: [
-      { batchNumber: '002', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/Certificate_Oxytocin.pdf' },
-    ],
-  },
-  { name: 'PT-141', link: '/product/pt-141/', batches: [] },
-  {
-    name: 'Semax',
-    link: '/product/semax/',
-    batches: [
-      { batchNumber: '001', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/Certificate_Semax.pdf' },
-    ],
-  },
-  {
-    name: 'Selank',
-    link: '/product/selank/',
-    batches: [
-      { batchNumber: '002', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/selank-1.pdf' },
-    ],
-  },
-  { name: 'PEG-MGF', link: '/product/peg-mgf/', batches: [] },
-];
+// Certificate data keyed by product slug — stays hardcoded since it's not in DB
+const batchesBySlug: Record<string, BatchInfo[]> = {
+  'slu-pp-332': [{ batchNumber: '001', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2025/06/Certificate_SLU.pdf' }],
+  'mots-c':     [{ batchNumber: '002', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2025/06/Certificate_MOTSc.pdf' }],
+  'ss-31':      [{ batchNumber: '002', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2025/06/Certificate_SS31.pdf' }],
+  'tb-500':     [{ batchNumber: '001', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/Certificate_Tb500-10mg.pdf' }],
+  'igf-1-lr3':  [{ batchNumber: '',    certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/BP-Certificate-1_17_Igf-1.pdf' }],
+  'bpc-157':    [{ batchNumber: '002', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/Certificate_BPC.pdf' }],
+  'bpc-157-tb-500-mix': [{ batchNumber: '002', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/Certificate_BP-TBmix.pdf' }],
+  'ipamorelin': [{ batchNumber: '001', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/Certificate_IPA.pdf' }],
+  'mt2-melanotan-ii': [{ batchNumber: '002', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/Certificate_MT.pdf' }],
+  'ghk-cu':     [{ batchNumber: '5/26/2027', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/GHK-CU.pdf' }],
+  'dsip':       [{ batchNumber: '001', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/Certificate_DSIP.pdf' }],
+  'oxytocin':   [{ batchNumber: '002', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/Certificate_Oxytocin.pdf' }],
+  'semax':      [{ batchNumber: '001', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/Certificate_Semax.pdf' }],
+  'selank':     [{ batchNumber: '002', certificateUrl: 'https://beyond-peptides.com/wp-content/uploads/2024/10/selank-1.pdf' }],
+};
 
 function ChevronDown({ rotated }: { rotated: boolean }) {
   return (
@@ -167,12 +56,20 @@ function DownloadIcon() {
 }
 
 export default function Transparency() {
+  const { products: dbProducts, loading } = useProducts();
   const [openAccordion, setOpenAccordion] = useState(false);
   const [expandedProduct, setExpandedProduct] = useState<string | null>(null);
 
   const toggleProduct = (name: string) => {
     setExpandedProduct((prev) => (prev === name ? null : name));
   };
+
+  // Build product list from DB: name + slug from DB, batches from local lookup
+  const products = dbProducts.map((p) => ({
+    name: p.name,
+    link: `/product/${p.slug}/`,
+    batches: batchesBySlug[p.slug] ?? [],
+  }));
 
   return (
     <section style={{ background: '#fff' }}>
@@ -264,7 +161,12 @@ export default function Transparency() {
                 className="overflow-y-auto"
                 style={{ maxHeight: 400, borderTop: openAccordion ? '1px solid #e5e7eb' : 'none' }}
               >
-                {products.map((product) => (
+                {loading && (
+                  <div className="px-4 py-3 font-primary text-[13px]" style={{ color: '#8494A6' }}>
+                    Loading products…
+                  </div>
+                )}
+                {!loading && products.map((product) => (
                   <div key={product.name} style={{ borderBottom: '1px solid #e5e7eb' }}>
                     {/* Product name row */}
                     <button

@@ -4,6 +4,9 @@ import TopBar from './components/TopBar'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import CartDrawer from './components/CartDrawer'
+import MobileMenuDrawer from './components/MobileMenuDrawer'
+import CookieConsent from './components/CookieConsent'
+import ChatWidget from './components/ChatWidget'
 import HomePage from './pages/HomePage'
 import ShopPage from './pages/ShopPage'
 import AboutPage from './pages/AboutPage'
@@ -19,6 +22,7 @@ import AdminProductEditPage from './pages/admin/AdminProductEditPage'
 import AdminOrdersPage from './pages/admin/AdminOrdersPage'
 import { CartProvider } from './context/CartContext'
 import { WishlistProvider } from './context/WishlistContext'
+import { MobileMenuProvider } from './context/MobileMenuContext'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -43,7 +47,11 @@ function App() {
   return (
     <CartProvider>
       <WishlistProvider>
+        <MobileMenuProvider>
         <ScrollToTop />
+        <MobileMenuDrawer />
+        <CookieConsent />
+        <ChatWidget />
         <Routes>
           {/* ── Admin ── */}
           <Route path="/admin/login" element={<AdminLoginPage />} />
@@ -77,6 +85,7 @@ function App() {
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        </MobileMenuProvider>
       </WishlistProvider>
     </CartProvider>
   )
