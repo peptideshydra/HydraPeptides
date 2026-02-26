@@ -43,6 +43,18 @@ function PublicLayout() {
   )
 }
 
+function GlobalWidgets() {
+  const { pathname } = useLocation()
+  const isAdmin = pathname.startsWith('/admin') || pathname.startsWith('/my-account')
+  if (isAdmin) return null
+  return (
+    <>
+      <CookieConsent />
+      <ChatWidget />
+    </>
+  )
+}
+
 function App() {
   return (
     <CartProvider>
@@ -50,8 +62,7 @@ function App() {
         <MobileMenuProvider>
         <ScrollToTop />
         <MobileMenuDrawer />
-        <CookieConsent />
-        <ChatWidget />
+        <GlobalWidgets />
         <Routes>
           {/* ── Admin ── */}
           <Route path="/admin/login" element={<AdminLoginPage />} />

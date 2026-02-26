@@ -291,21 +291,21 @@ export default function AdminProductEditPage() {
   }
 
   return (
-    <div className="p-8 max-w-[900px]">
+    <div className="p-4 sm:p-8 max-w-[900px] w-full">
       {/* Top bar */}
-      <div className="flex items-center gap-4 mb-8">
-        <button onClick={() => navigate('/admin')} className="p-2 rounded-lg text-[#6B7785] hover:text-white hover:bg-[#1a1d27] transition-colors">
+      <div className="flex items-center gap-3 mb-6 sm:mb-8">
+        <button onClick={() => navigate('/admin')} className="p-2 rounded-lg text-[#6B7785] hover:text-white hover:bg-[#1a1d27] transition-colors shrink-0">
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-[22px] font-bold text-white font-primary flex-1">
+        <h1 className="text-[16px] sm:text-[22px] font-bold text-white font-primary flex-1 min-w-0 truncate">
           {isNew ? 'New Product' : `Edit: ${form.name}`}
         </h1>
         <button
           onClick={handleSave}
           disabled={saving}
-          className="px-6 py-2.5 rounded-lg bg-[#16A1C5] text-white font-primary font-semibold text-[14px] hover:bg-[#1291b3] transition-colors disabled:opacity-60"
+          className="px-4 sm:px-6 py-2.5 rounded-lg bg-[#16A1C5] text-white font-primary font-semibold text-[13px] sm:text-[14px] hover:bg-[#1291b3] transition-colors disabled:opacity-60 shrink-0"
         >
-          {saving ? 'Saving…' : 'Save Product'}
+          {saving ? 'Saving…' : 'Save'}
         </button>
       </div>
 
@@ -314,9 +314,9 @@ export default function AdminProductEditPage() {
       )}
 
       {/* ─── Basic info ─── */}
-      <section className="bg-[#1a1d27] rounded-xl border border-[#2a2d37] p-6 mb-6">
+      <section className="bg-[#1a1d27] rounded-xl border border-[#2a2d37] p-4 sm:p-6 mb-6">
         <h2 className="text-[16px] font-semibold text-white font-primary mb-5">Basic Information</h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input label="Product Name" value={form.name} onChange={(e) => {
             const name = (e.target as HTMLInputElement).value
             update('name', name)
@@ -354,12 +354,12 @@ export default function AdminProductEditPage() {
       </section>
 
       {/* ─── Image ─── */}
-      <section className="bg-[#1a1d27] rounded-xl border border-[#2a2d37] p-6 mb-6">
+      <section className="bg-[#1a1d27] rounded-xl border border-[#2a2d37] p-4 sm:p-6 mb-6">
         <h2 className="text-[16px] font-semibold text-white font-primary mb-5">Product Image</h2>
-        <div className="flex items-start gap-6">
+        <div className="flex items-start gap-4 flex-wrap">
           {form.image && (
-            <div className="relative">
-              <img src={form.image} alt="" className="w-32 h-32 rounded-xl object-cover bg-[#0f1117]" />
+            <div className="relative shrink-0">
+              <img src={form.image} alt="" className="w-24 h-24 sm:w-32 sm:h-32 rounded-xl object-cover bg-[#0f1117]" />
               <button
                 onClick={() => update('image', '')}
                 className="absolute -top-2 -right-2 p-1 rounded-full bg-red-500 text-white hover:bg-red-600"
@@ -368,8 +368,8 @@ export default function AdminProductEditPage() {
               </button>
             </div>
           )}
-          <div>
-            <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#2a2d37] text-[#9ca3af] hover:text-white cursor-pointer transition-colors font-primary text-[14px]">
+          <div className="flex-1 min-w-0">
+            <label className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#2a2d37] text-[#9ca3af] hover:text-white cursor-pointer transition-colors font-primary text-[14px]">
               <Upload className="w-4 h-4" />
               {uploading ? 'Uploading…' : 'Upload Image'}
               <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
@@ -380,14 +380,14 @@ export default function AdminProductEditPage() {
               value={form.image}
               onChange={(e) => update('image', e.target.value)}
               placeholder="https://..."
-              className="mt-1 w-[300px] h-9 px-3 rounded-lg bg-[#0f1117] border border-[#2a2d37] text-white font-primary text-[13px] outline-none focus:border-[#16A1C5]"
+              className="mt-1 w-full h-9 px-3 rounded-lg bg-[#0f1117] border border-[#2a2d37] text-white font-primary text-[13px] outline-none focus:border-[#16A1C5]"
             />
           </div>
         </div>
       </section>
 
       {/* ─── Variations ─── */}
-      <section className="bg-[#1a1d27] rounded-xl border border-[#2a2d37] p-6 mb-6">
+      <section className="bg-[#1a1d27] rounded-xl border border-[#2a2d37] p-4 sm:p-6 mb-6">
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-[16px] font-semibold text-white font-primary">Variations</h2>
           <button onClick={addVariation} className="flex items-center gap-1.5 text-[13px] text-[#16A1C5] hover:text-white font-primary transition-colors">
@@ -409,13 +409,13 @@ export default function AdminProductEditPage() {
             </div>
             <div className="space-y-2">
               {variation.vials.map((vial, vii) => (
-                <div key={vii} className="flex items-center gap-3">
+                <div key={vii} className="flex flex-wrap items-center gap-2">
                   <input placeholder="Label (e.g. 1 Vial)" value={vial.label}
                     onChange={(e) => updateVial(vi, vii, 'label', e.target.value)}
-                    className="flex-1 h-9 px-3 rounded-lg bg-[#1a1d27] border border-[#2a2d37] text-white font-primary text-[13px] outline-none focus:border-[#16A1C5]" />
+                    className="flex-1 min-w-[120px] h-9 px-3 rounded-lg bg-[#1a1d27] border border-[#2a2d37] text-white font-primary text-[13px] outline-none focus:border-[#16A1C5]" />
                   <input placeholder="Price" type="number" step="0.01" value={vial.price}
                     onChange={(e) => updateVial(vi, vii, 'price', e.target.value)}
-                    className={`w-24 h-9 px-3 rounded-lg bg-[#1a1d27] border border-[#2a2d37] text-white font-primary text-[13px] outline-none focus:border-[#16A1C5] ${noSpinnerClass}`} />
+                    className={`w-20 h-9 px-3 rounded-lg bg-[#1a1d27] border border-[#2a2d37] text-white font-primary text-[13px] outline-none focus:border-[#16A1C5] ${noSpinnerClass}`} />
                   <input placeholder="Discount" value={vial.discount ?? ''}
                     onChange={(e) => updateVial(vi, vii, 'discount', e.target.value || null)}
                     className="w-20 h-9 px-3 rounded-lg bg-[#1a1d27] border border-[#2a2d37] text-white font-primary text-[13px] outline-none focus:border-[#16A1C5]" />
@@ -432,7 +432,7 @@ export default function AdminProductEditPage() {
       </section>
 
       {/* ─── Product Details (accordion content) ─── */}
-      <section className="bg-[#1a1d27] rounded-xl border border-[#2a2d37] p-6 mb-6">
+      <section className="bg-[#1a1d27] rounded-xl border border-[#2a2d37] p-4 sm:p-6 mb-6">
         <h2 className="text-[16px] font-semibold text-white font-primary mb-5">Product Details (HTML)</h2>
         <div className="space-y-4">
           <Textarea label="Research Purpose" rows={5} value={details.research_purpose} onChange={(e) => updateDetail('research_purpose', e.target.value)} />
@@ -443,11 +443,11 @@ export default function AdminProductEditPage() {
       </section>
 
       {/* Bottom save */}
-      <div className="flex justify-end">
+      <div className="flex justify-end pb-6">
         <button
           onClick={handleSave}
           disabled={saving}
-          className="px-8 py-3 rounded-lg bg-[#16A1C5] text-white font-primary font-semibold text-[14px] hover:bg-[#1291b3] transition-colors disabled:opacity-60"
+          className="w-full sm:w-auto px-8 py-3 rounded-lg bg-[#16A1C5] text-white font-primary font-semibold text-[14px] hover:bg-[#1291b3] transition-colors disabled:opacity-60"
         >
           {saving ? 'Saving…' : 'Save Product'}
         </button>
