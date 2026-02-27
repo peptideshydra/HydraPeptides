@@ -1,9 +1,10 @@
 import { useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ChevronRight } from 'lucide-react'
+import emailjs from '@emailjs/browser'
 import ShopNav from '../components/ShopNav'
 import { useCart } from '../context/CartContext'
-import { COUNTRIES } from '../data/countries'
+import { COUNTRIES, getCountryName } from '../data/countries'
 import { createOrder } from '../lib/supabase'
 
 const DEFAULT_COUNTRY = 'RS'
@@ -145,7 +146,6 @@ export default function CheckoutPage() {
   const navigate = useNavigate()
   const formRef = useRef<HTMLFormElement>(null)
   const { items, subtotal, total, couponDiscount, coupon, applyCoupon, clearCart } = useCart()
-  const [showLogin, setShowLogin] = useState(false)
   const [showCoupon, setShowCoupon] = useState(false)
   const [shipToDifferent, setShipToDifferent] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState('bacs')
@@ -171,6 +171,19 @@ export default function CheckoutPage() {
     setPlacing(true)
     setPlaceError(null)
 
+    const billingCountry = get('billing_country') || 'RS'
+    const shippingCountry = shipToDifferent ? (get('shipping_country') || 'RS') : billingCountry
+    const paymentLabel = paymentMethod === 'bacs' ? 'Direct bank transfer' : 'Bitcoin'
+
+    const shippingFirst = shipToDifferent ? get('shipping_first_name') : get('billing_first_name')
+    const shippingLast  = shipToDifferent ? get('shipping_last_name')  : get('billing_last_name')
+    const shippingAddr1 = shipToDifferent ? get('shipping_address_1')  : get('billing_address_1')
+    const shippingAddr2 = shipToDifferent ? get('shipping_address_2')  : get('billing_address_2')
+    const shippingCity  = shipToDifferent ? get('shipping_city')       : get('billing_city')
+    const shippingState = shipToDifferent ? get('shipping_state')      : get('billing_state')
+    const shippingPost  = shipToDifferent ? get('shipping_postcode')   : get('billing_postcode')
+    const shippingComp  = shipToDifferent ? get('shipping_company')    : get('billing_company')
+
     const { error } = await createOrder({
       order_number: orderNumber,
       billing_first_name: get('billing_first_name'),
@@ -181,24 +194,24 @@ export default function CheckoutPage() {
       billing_city: get('billing_city'),
       billing_state: get('billing_state'),
       billing_postcode: get('billing_postcode'),
-      billing_country: get('billing_country') || 'RS',
+      billing_country: billingCountry,
       billing_phone: get('billing_phone'),
       billing_email: billingEmail,
-      shipping_first_name: shipToDifferent ? get('shipping_first_name') : get('billing_first_name'),
-      shipping_last_name: shipToDifferent ? get('shipping_last_name') : get('billing_last_name'),
-      shipping_company: shipToDifferent ? get('shipping_company') : get('billing_company'),
-      shipping_address_1: shipToDifferent ? get('shipping_address_1') : get('billing_address_1'),
-      shipping_address_2: shipToDifferent ? get('shipping_address_2') : get('billing_address_2'),
-      shipping_city: shipToDifferent ? get('shipping_city') : get('billing_city'),
-      shipping_state: shipToDifferent ? get('shipping_state') : get('billing_state'),
-      shipping_postcode: shipToDifferent ? get('shipping_postcode') : get('billing_postcode'),
-      shipping_country: shipToDifferent ? (get('shipping_country') || 'RS') : (get('billing_country') || 'RS'),
+      shipping_first_name: shippingFirst,
+      shipping_last_name:  shippingLast,
+      shipping_company:    shippingComp,
+      shipping_address_1:  shippingAddr1,
+      shipping_address_2:  shippingAddr2,
+      shipping_city:       shippingCity,
+      shipping_state:      shippingState,
+      shipping_postcode:   shippingPost,
+      shipping_country:    shippingCountry,
       subtotal,
       shipping_cost: SHIPPING_RATE,
       coupon_code: coupon,
       coupon_discount: couponDiscount,
       total: totalWithShipping,
-      payment_method: paymentMethod === 'bacs' ? 'Direct bank transfer' : 'Bitcoin',
+      payment_method: paymentLabel,
       order_notes: get('order_comments'),
       items: items.map((i) => ({
         product_slug: i.slug,
@@ -211,13 +224,60 @@ export default function CheckoutPage() {
       })),
     })
 
-    setPlacing(false)
-
     if (error) {
+      setPlacing(false)
       setPlaceError('Something went wrong. Please try again.')
       return
     }
 
+    // ─── Send email notification via EmailJS ───────────────────────────
+    try {
+      const itemsHtml = items
+        .map((i) => {
+          const desc = [i.name, i.dosage, i.vial].filter(Boolean).join(' — ')
+          return `${desc} &times; ${i.quantity} &nbsp;&nbsp; <strong>$${(i.price * i.quantity).toFixed(2)}</strong>`
+        })
+        .join('<br/>')
+
+      const billingAddrLine = [get('billing_address_1'), get('billing_address_2')].filter(Boolean).join(', ')
+      const shippingAddrLine = [shippingAddr1, shippingAddr2].filter(Boolean).join(', ')
+
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID as string,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string,
+        {
+          to_email:               import.meta.env.VITE_ADMIN_EMAIL as string,
+          order_number:           orderNumber,
+          order_date:             new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+          status:                 'Pending',
+          payment_method:         paymentLabel,
+          order_notes:            get('order_comments') || '—',
+          items_html:             itemsHtml,
+          subtotal:               `$${subtotal.toFixed(2)}`,
+          shipping_cost:          `$${SHIPPING_RATE.toFixed(2)}`,
+          coupon_code:            coupon || '—',
+          coupon_discount:        couponDiscount > 0 ? `-$${couponDiscount.toFixed(2)}` : '—',
+          total:                  `$${totalWithShipping.toFixed(2)}`,
+          billing_name:           `${get('billing_first_name')} ${get('billing_last_name')}`,
+          billing_company:        get('billing_company') || '—',
+          billing_address:        billingAddrLine || '—',
+          billing_city_postcode:  `${get('billing_city')} ${get('billing_postcode')}`.trim(),
+          billing_country:        getCountryName(billingCountry),
+          billing_phone:          get('billing_phone') || '—',
+          billing_email:          billingEmail,
+          shipping_name:          `${shippingFirst} ${shippingLast}`.trim(),
+          shipping_company:       shippingComp || '—',
+          shipping_address:       shippingAddrLine || '—',
+          shipping_city_postcode: `${shippingCity} ${shippingPost}`.trim(),
+          shipping_country:       getCountryName(shippingCountry),
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string,
+      )
+    } catch (emailErr) {
+      console.warn('EmailJS error (order still saved):', emailErr)
+    }
+
+    setPlacing(false)
     clearCart()
     navigate('/checkout/order-received', { state: { orderNumber } })
   }
@@ -250,39 +310,6 @@ export default function CheckoutPage() {
             <div className="flex flex-col lg:flex-row gap-10">
               {/* Left column - Form */}
               <div className="flex-1">
-                {/* Returning customer */}
-                <div className="mb-8 p-6 rounded-xl bg-white border border-[#eef0f3]">
-                  <p className="text-[#6B7785] text-[14px] mb-5">
-                    Returning customer?{' '}
-                    <button type="button" onClick={() => setShowLogin(!showLogin)} className="text-[#16A1C5] hover:underline">
-                      Click here to login
-                    </button>
-                  </p>
-                  {showLogin && (
-                    <div className="space-y-4 pt-4 border-t border-[#e5e7eb]">
-                      <p className="text-[#6B7785] text-[13px]">If you have shopped with us before, please enter your details below. If you are a new customer, please proceed to the Billing section.</p>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <FormField label="Email" required>
-                          <input type="text" name="username" id="username" autoComplete="username" className="input-text w-full h-10 px-3 rounded-lg border border-[#e5e7eb] font-primary text-[14px] outline-none focus:border-[#16A1C5]" />
-                        </FormField>
-                        <FormField label="Password" required>
-                          <input type="password" name="password" id="password" autoComplete="current-password" className="input-text w-full h-10 px-3 rounded-lg border border-[#e5e7eb] font-primary text-[14px] outline-none focus:border-[#16A1C5]" />
-                        </FormField>
-                      </div>
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                        <label className="flex items-center gap-2 cursor-pointer">
-                          <input type="checkbox" name="rememberme" value="forever" className="w-4 h-4 rounded border-[#DBDFE5]" />
-                          <span className="text-[14px] text-[#444B53]">Remember me</span>
-                        </label>
-                        <a href="#" className="text-[14px] text-[#16A1C5] hover:underline">Lost your password?</a>
-                      </div>
-                      <button type="button" className="h-10 px-6 rounded-lg bg-[#22282F] text-white font-primary font-semibold text-[14px] hover:bg-[#333a42] transition-colors">
-                        Login
-                      </button>
-                    </div>
-                  )}
-                </div>
-
                 {/* Billing Details */}
                 <div className="mb-8 p-6 rounded-xl bg-white border border-[#eef0f3]">
                   <h3 className="font-semibold text-[18px] text-[#22282F] mb-1">Billing Details</h3>

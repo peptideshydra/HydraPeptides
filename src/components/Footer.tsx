@@ -155,18 +155,15 @@ export default function Footer() {
                 We deliver quality beyond expectations.
               </p>
               <div className="flex gap-2.5 mt-4">
-                <a
-                  href="https://www.instagram.com/beyondpeptides.shop/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-9 h-9 rounded-full transition-all hover:border-[#16a1c5]"
+                <span
+                  className="flex items-center justify-center w-9 h-9 rounded-full transition-all hover:border-[#16a1c5] cursor-default"
                   style={{
                     border: '1px solid rgba(255,255,255,0.15)',
                     color: 'rgba(255,255,255,0.5)',
                   }}
                 >
                   <InstagramIcon />
-                </a>
+                </span>
               </div>
             </div>
 

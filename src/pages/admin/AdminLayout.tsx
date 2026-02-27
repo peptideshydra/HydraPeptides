@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Navigate, Outlet, NavLink } from 'react-router-dom'
-import { Package, ShoppingCart, LogOut, Menu, X } from 'lucide-react'
+import { Navigate, Outlet, NavLink, Link } from 'react-router-dom'
+import { Package, ShoppingCart, LogOut, Menu, X, ExternalLink } from 'lucide-react'
 import { useAdmin } from '../../hooks/useAdmin'
 
 export default function AdminLayout() {
@@ -36,8 +36,16 @@ export default function AdminLayout() {
           Orders
         </NavLink>
       </nav>
-      <div className="p-4 border-t border-[#2a2d37]">
-        <div className="text-[12px] text-[#6B7785] font-primary mb-3 truncate">{user.email}</div>
+      <div className="p-4 border-t border-[#2a2d37] space-y-2">
+        <div className="text-[12px] text-[#6B7785] font-primary mb-1 truncate">{user.email}</div>
+        <Link
+          to="/"
+          onClick={() => setDrawerOpen(false)}
+          className="flex items-center gap-2 text-[13px] text-[#9ca3af] hover:text-[#16A1C5] transition-colors font-primary"
+        >
+          <ExternalLink className="w-4 h-4" />
+          View Site
+        </Link>
         <button
           onClick={signOut}
           className="flex items-center gap-2 text-[13px] text-[#9ca3af] hover:text-red-400 transition-colors font-primary"
