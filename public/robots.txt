@@ -10,4 +10,4 @@ Disallow: /checkout/
 Disallow: /checkout/order-received/
 Disallow: /wishlist/
 
-Sitemap: https://beyondpeptides.com/sitemap.xml
+Sitemap: https://hydrapeptides.com/sitemap.xml

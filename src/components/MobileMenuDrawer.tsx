@@ -79,7 +79,7 @@ export default function MobileMenuDrawer() {
         {/* Top bar */}
         <div className="flex items-center justify-between px-5 h-[62px] shrink-0 border-b border-white/10">
           <Link to="/" onClick={closeMenu}>
-            <img src="https://beyond-peptides.com/wp-content/uploads/2024/09/website-logo-1.svg" alt="Beyond Peptides" className="h-[26px]" />
+            <img src="/beli-logo.png" alt="Hydra Peptides" className="h-[70px]" />
           </Link>
           <button
             onClick={closeMenu}

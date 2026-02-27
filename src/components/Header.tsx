@@ -149,12 +149,12 @@ export default function Header() {
           <img
             src={
               scrolled
-                ? 'https://beyond-peptides.com/wp-content/uploads/2024/09/color-logo-1.svg'
-                : 'https://beyond-peptides.com/wp-content/uploads/2024/09/website-logo-1.svg'
+                ? '/logo-u-boji.png'
+                : '/beli-logo.png'
             }
-            alt="Beyond Peptides"
+            alt="Hydra Peptides"
             className="transition-opacity duration-300"
-            style={{ height: 30 }}
+            style={{ height: 70 }}
           />
         </Link>
 

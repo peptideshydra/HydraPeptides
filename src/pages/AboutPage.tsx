@@ -93,7 +93,7 @@ function AboutIntro() {
         <div className="hidden md:block flex-shrink-0" style={{ width: 'clamp(280px, 30vw, 556px)' }}>
           <img
             src="https://beyond-peptides.com/wp-content/uploads/2024/10/about-hero-img.png"
-            alt="About Beyond Peptides"
+            alt="About Hydra Peptides"
             className="w-full h-auto"
             width={556}
             height={525}
@@ -243,7 +243,7 @@ function WhyChoose() {
           className="font-primary font-semibold leading-[1.35] mb-12"
           style={{ fontSize: 'clamp(24px, 2.6vw, 40px)', color: '#22282F' }}
         >
-          Why Choose Beyond Peptides?
+          Why Choose Hydra Peptides?
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

@@ -92,7 +92,7 @@ const faqItems = [
   },
   {
     question: 'How can I contact customer support?',
-    answer: '<p class="font-primary text-[14px] text-[#444B53] leading-relaxed">You can reach our customer support team via our <strong>email address (<a href="mailto:contact@beyond-peptides.com" class="text-[#16A1C5] hover:underline">contact@beyond-peptides.com</a>)</strong>. We are also working on providing support through <strong>WhatsApp</strong> in the near future.</p>',
+    answer: '<p class="font-primary text-[14px] text-[#444B53] leading-relaxed">You can reach our customer support team via our <strong>email address (<a href="mailto:contact@hydrapeptides.com" class="text-[#16A1C5] hover:underline">contact@hydrapeptides.com</a>)</strong>. We are also working on providing support through <strong>WhatsApp</strong> in the near future.</p>',
   },
   {
     question: 'What measures do you take to ensure product security and trust?',

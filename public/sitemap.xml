@@ -3,209 +3,209 @@
 
   <!-- Static pages -->
   <url>
-    <loc>https://beyondpeptides.com/</loc>
+    <loc>https://hydrapeptides.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/shop/</loc>
+    <loc>https://hydrapeptides.com/shop/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/about-us/</loc>
+    <loc>https://hydrapeptides.com/about-us/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/faq/</loc>
+    <loc>https://hydrapeptides.com/faq/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <!-- Product pages -->
   <url>
-    <loc>https://beyondpeptides.com/product/bpc-157/</loc>
+    <loc>https://hydrapeptides.com/product/bpc-157/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/tb-500/</loc>
+    <loc>https://hydrapeptides.com/product/tb-500/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/bpc-157-tb-500-mix/</loc>
+    <loc>https://hydrapeptides.com/product/bpc-157-tb-500-mix/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/nad/</loc>
+    <loc>https://hydrapeptides.com/product/nad/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/aod-9604/</loc>
+    <loc>https://hydrapeptides.com/product/aod-9604/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/igf-1-lr3/</loc>
+    <loc>https://hydrapeptides.com/product/igf-1-lr3/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/peg-mgf/</loc>
+    <loc>https://hydrapeptides.com/product/peg-mgf/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/hcg/</loc>
+    <loc>https://hydrapeptides.com/product/hcg/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/gut-pro/</loc>
+    <loc>https://hydrapeptides.com/product/gut-pro/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/beyondc/</loc>
+    <loc>https://hydrapeptides.com/product/beyondc/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/tesa/</loc>
+    <loc>https://hydrapeptides.com/product/tesa/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/selank/</loc>
+    <loc>https://hydrapeptides.com/product/selank/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/semax/</loc>
+    <loc>https://hydrapeptides.com/product/semax/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/dsip/</loc>
+    <loc>https://hydrapeptides.com/product/dsip/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/oxytocin/</loc>
+    <loc>https://hydrapeptides.com/product/oxytocin/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/epithalon/</loc>
+    <loc>https://hydrapeptides.com/product/epithalon/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/ghk-cu/</loc>
+    <loc>https://hydrapeptides.com/product/ghk-cu/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/beyond-hair/</loc>
+    <loc>https://hydrapeptides.com/product/beyond-hair/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/bac/</loc>
+    <loc>https://hydrapeptides.com/product/bac/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/kp/</loc>
+    <loc>https://hydrapeptides.com/product/kp/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/hgh-fragment-176-191/</loc>
+    <loc>https://hydrapeptides.com/product/hgh-fragment-176-191/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/beyondg/</loc>
+    <loc>https://hydrapeptides.com/product/beyondg/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/mt2-melanotan-ii/</loc>
+    <loc>https://hydrapeptides.com/product/mt2-melanotan-ii/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/ipamorelin/</loc>
+    <loc>https://hydrapeptides.com/product/ipamorelin/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/mb/</loc>
+    <loc>https://hydrapeptides.com/product/mb/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/l-carnitine/</loc>
+    <loc>https://hydrapeptides.com/product/l-carnitine/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/beyond-skin/</loc>
+    <loc>https://hydrapeptides.com/product/beyond-skin/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/vi/</loc>
+    <loc>https://hydrapeptides.com/product/vi/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/pt-141/</loc>
+    <loc>https://hydrapeptides.com/product/pt-141/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/ss-31/</loc>
+    <loc>https://hydrapeptides.com/product/ss-31/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/mots-c/</loc>
+    <loc>https://hydrapeptides.com/product/mots-c/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/5-a1mq/</loc>
+    <loc>https://hydrapeptides.com/product/5-a1mq/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/slu-pp-332/</loc>
+    <loc>https://hydrapeptides.com/product/slu-pp-332/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/beyond-sleep/</loc>
+    <loc>https://hydrapeptides.com/product/beyond-sleep/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/thymosin/</loc>
+    <loc>https://hydrapeptides.com/product/thymosin/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/klo/</loc>
+    <loc>https://hydrapeptides.com/product/klo/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beyondpeptides.com/product/glow/</loc>
+    <loc>https://hydrapeptides.com/product/glow/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

@@ -141,8 +141,8 @@ export default function Footer() {
             <div>
               <a href="/">
                 <img
-                  src="https://beyond-peptides.com/wp-content/uploads/2024/09/website-logo-1.svg"
-                  alt="Beyond Peptides"
+                  src="/beli-logo.png"
+                  alt="Hydra Peptides"
                   width={130}
                   height={35}
                   loading="lazy"
@@ -334,7 +334,7 @@ export default function Footer() {
           {/* Copyright */}
           <div className="py-5 text-center">
             <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.35)' }}>
-              &copy; 2025 Beyond Peptides
+              &copy; 2025 Hydra Peptides
             </p>
           </div>
         </div>

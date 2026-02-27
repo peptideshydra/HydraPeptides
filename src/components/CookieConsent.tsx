@@ -8,7 +8,7 @@ interface CookiePrefs {
   advertisement: boolean
 }
 
-const STORAGE_KEY = 'bp_cookie_consent'
+const STORAGE_KEY = 'hp_cookie_consent'
 const defaultPrefs: CookiePrefs = { necessary: true, functional: false, analytics: false, performance: false, advertisement: false }
 
 const categories: { key: keyof CookiePrefs; label: string; alwaysActive?: boolean; description: string }[] = [

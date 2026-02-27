@@ -124,7 +124,7 @@ export function InvoicePDF({ order }: { order: OrderWithItems }) {
   const isBacs = order.payment_method === 'Direct bank transfer'
 
   return (
-    <Document title={`Invoice-${order.order_number}`} author="Beyond Peptides">
+    <Document title={`Invoice-${order.order_number}`} author="Hydra Peptides">
 
       {/* ═══════════════════ PAGE 1 ═══════════════════ */}
       <Page size="A4" style={s.page}>
@@ -132,13 +132,13 @@ export function InvoicePDF({ order }: { order: OrderWithItems }) {
         {/* Header */}
         <View style={s.headerRow}>
           <View style={s.logoWrap}>
-            <Text style={s.logoBig}>Beyond Peptides</Text>
-            <Text style={s.logoSub}>beyond-peptides.com</Text>
+            <Text style={s.logoBig}>Hydra Peptides</Text>
+            <Text style={s.logoSub}>hydrapeptides.com</Text>
           </View>
           <View style={s.companyBox}>
             <Text style={s.companyName}>BP RESEARCH Sp. z o.o.</Text>
             <Text style={s.companyLine}>ul. Młyńska 16 (8th Floor), 61-730 Poznań, Poland</Text>
-            <Text style={s.companyLine}>contact@beyond-peptides.com</Text>
+            <Text style={s.companyLine}>contact@hydrapeptides.com</Text>
             <Text style={s.companyLine}>NIP: 7831913422 | EU-VAT: PL7831913422 | KRS: 0001130178</Text>
           </View>
         </View>
@@ -195,7 +195,7 @@ export function InvoicePDF({ order }: { order: OrderWithItems }) {
             <View style={s.sparkasseWrap}>
               <Text style={s.sparkasseTitle}>Important for Sparkasse Customers:</Text>
               <Text style={s.sparkasseText}>Transfers to Revolut are sometimes blocked by automated security filters. If your payment is rejected, please instruct your bank to release the transaction manually.</Text>
-              <Text style={[s.sparkasseText, { marginTop: 3 }]}>Problems with payment? Email us: contact@beyond-peptides.com</Text>
+              <Text style={[s.sparkasseText, { marginTop: 3 }]}>Problems with payment? Email us: contact@hydrapeptides.com</Text>
             </View>
           </View>
         )}

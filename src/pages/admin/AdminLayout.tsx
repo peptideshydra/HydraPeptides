@@ -63,7 +63,7 @@ export default function AdminLayout() {
       {/* ─── Mobile top bar ─── */}
       <header className="md:hidden fixed top-0 left-0 right-0 z-[200] h-14 bg-[#0f1117] border-b border-[#2a2d37] flex items-center justify-between px-4">
         <div>
-          <span className="text-[15px] font-bold text-white font-primary">Beyond Peptides</span>
+          <span className="text-[15px] font-bold text-white font-primary">Hydra Peptides</span>
           <span className="text-[11px] text-[#6B7785] font-primary ml-2">Admin</span>
         </div>
         <button
@@ -91,7 +91,7 @@ export default function AdminLayout() {
       >
         <div className="p-5 border-b border-[#2a2d37] flex items-center justify-between">
           <div>
-            <h1 className="text-[15px] font-bold text-white font-primary">Beyond Peptides</h1>
+            <h1 className="text-[15px] font-bold text-white font-primary">Hydra Peptides</h1>
             <p className="text-[11px] text-[#6B7785] font-primary mt-0.5">Admin Panel</p>
           </div>
           <button
@@ -108,7 +108,7 @@ export default function AdminLayout() {
       <div className="hidden md:flex min-h-screen">
         <aside className="w-[240px] shrink-0 border-r border-[#2a2d37] flex flex-col">
           <div className="p-6 border-b border-[#2a2d37]">
-            <h1 className="text-[16px] font-bold text-white font-primary">Beyond Peptides</h1>
+            <h1 className="text-[16px] font-bold text-white font-primary">Hydra Peptides</h1>
             <p className="text-[12px] text-[#6B7785] font-primary mt-0.5">Admin Panel</p>
           </div>
           <NavContent />

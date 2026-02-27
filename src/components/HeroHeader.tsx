@@ -46,12 +46,12 @@ export default function HeroHeader({ activeNav }: HeroHeaderProps) {
 
       {/* MOBILE: logo centered */}
       <Link to="/" className="md:hidden absolute left-1/2 -translate-x-1/2 flex items-center">
-        <img src="https://beyond-peptides.com/wp-content/uploads/2024/09/website-logo-1.svg" alt="Beyond Peptides" className="h-[26px]" />
+        <img src="/beli-logo.png" alt="Hydra Peptides" className="h-[70px]" />
       </Link>
 
       {/* DESKTOP: logo */}
       <Link to="/" className="hidden md:flex items-center shrink-0">
-        <img src="https://beyond-peptides.com/wp-content/uploads/2024/09/website-logo-1.svg" alt="Beyond Peptides" className="h-[30px]" />
+        <img src="/beli-logo.png" alt="Hydra Peptides" className="h-[70px]" />
       </Link>
 
       {/* DESKTOP: nav */}

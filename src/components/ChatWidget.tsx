@@ -7,7 +7,7 @@ interface Message {
 
 const initialMessages: Message[] = [
   { from: 'bot', text: 'Hi there! 👋' },
-  { from: 'bot', text: "I'm your Beyond Peptides assistant and can help you find products." },
+  { from: 'bot', text: "I'm your Hydra Peptides assistant and can help you find products." },
   { from: 'bot', text: 'Note: All products are sold for *research use only*.' },
 ]
 
