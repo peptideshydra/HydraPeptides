@@ -1,7 +1,26 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, Upload, X, Plus, Trash2 } from 'lucide-react'
+import { Editor } from '@tinymce/tinymce-react'
 import { supabase, type ProductRow, type ProductDetailRow, type Variation, type VialOption } from '../../lib/supabase'
+
+const TINYMCE_API_KEY = import.meta.env.VITE_TINYMCE_API_KEY as string
+
+const tinymceInit = {
+  height: 280,
+  menubar: false,
+  skin: 'oxide-dark',
+  content_css: 'dark',
+  plugins: [
+    'advlist', 'autolink', 'lists', 'link', 'charmap',
+    'searchreplace', 'visualblocks', 'code', 'fullscreen',
+    'insertdatetime', 'table', 'wordcount',
+  ],
+  toolbar:
+    'undo redo | blocks | bold italic underline | ' +
+    'bullist numlist | link | code | removeformat',
+  content_style: 'body { font-family: Arial, sans-serif; font-size: 14px; background: #0f1117; color: #e5e7eb; }',
+} as const
 
 const CATEGORIES = ['All Peptides', 'Tablets', 'Cosmetics and Topicals']
 
@@ -71,17 +90,6 @@ function Input({ label, type, className = '', ...props }: { label: string } & Re
   )
 }
 
-function Textarea({ label, ...props }: { label: string } & React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return (
-    <div>
-      <label className="block text-[12px] text-[#6B7785] mb-1 font-primary">{label}</label>
-      <textarea
-        {...props}
-        className="w-full px-3 py-2 rounded-lg bg-[#0f1117] border border-[#2a2d37] text-white font-primary text-[14px] outline-none focus:border-[#16A1C5] transition-colors resize-y min-h-[120px]"
-      />
-    </div>
-  )
-}
 
 function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
   return (
@@ -434,11 +442,25 @@ export default function AdminProductEditPage() {
       {/* ─── Product Details (accordion content) ─── */}
       <section className="bg-[#1a1d27] rounded-xl border border-[#2a2d37] p-4 sm:p-6 mb-6">
         <h2 className="text-[16px] font-semibold text-white font-primary mb-5">Product Details (HTML)</h2>
-        <div className="space-y-4">
-          <Textarea label="Research Purpose" rows={5} value={details.research_purpose} onChange={(e) => updateDetail('research_purpose', e.target.value)} />
-          <Textarea label="Ingredients" rows={5} value={details.ingredients} onChange={(e) => updateDetail('ingredients', e.target.value)} />
-          <Textarea label="Packaging Contents" rows={5} value={details.packaging_contents} onChange={(e) => updateDetail('packaging_contents', e.target.value)} />
-          <Textarea label="Molecular Structure" rows={5} value={details.molecular_structure} onChange={(e) => updateDetail('molecular_structure', e.target.value)} />
+        <div className="space-y-6">
+          {(
+            [
+              { key: 'research_purpose', label: 'Research Purpose' },
+              { key: 'ingredients', label: 'Ingredients' },
+              { key: 'packaging_contents', label: 'Packaging Contents' },
+              { key: 'molecular_structure', label: 'Molecular Structure' },
+            ] as const
+          ).map(({ key, label }) => (
+            <div key={key}>
+              <label className="block text-[13px] text-[#9ca3af] font-primary mb-2">{label}</label>
+              <Editor
+                apiKey={TINYMCE_API_KEY}
+                value={details[key] ?? ''}
+                onEditorChange={(val) => updateDetail(key, val)}
+                init={tinymceInit}
+              />
+            </div>
+          ))}
         </div>
       </section>
 

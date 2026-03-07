@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useCurrency } from '../context/CurrencyContext';
 
 const navLinks = [
   { label: 'Home', href: '/' },
@@ -104,6 +105,15 @@ export default function Header() {
   const [megaOpen, setMegaOpen] = useState(false);
   const megaTimeout = useRef<ReturnType<typeof setTimeout>>(null);
   const { openCart, totalItems } = useCart();
+  const { fmt } = useCurrency();
+  const location = useLocation();
+
+  function handleHomeClick(e: React.MouseEvent) {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -145,7 +155,7 @@ export default function Header() {
         }}
       >
         {/* Logo */}
-        <Link to="/" className="flex items-center shrink-0">
+        <Link to="/" className="flex items-center shrink-0" onClick={handleHomeClick}>
           <img
             src={
               scrolled
@@ -293,7 +303,7 @@ export default function Header() {
                             style={{ background: '#22282F' }}
                           >
                             <span className="font-primary font-semibold text-[13px] text-white">
-                              USD $139.99
+                              {fmt(139.99)}
                             </span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none">
                               <path d="M13.1234 8.75V5C13.1234 4.1712 12.7942 3.37634 12.2081 2.79029C11.6221 2.20424 10.8272 1.875 9.9984 1.875C9.1696 1.875 8.37474 2.20424 7.78869 2.79029C7.20264 3.37634 6.8734 4.1712 6.8734 5V8.75M16.3367 7.08917L17.3892 17.0892C17.4476 17.6433 17.0142 18.125 16.4567 18.125H3.54007C3.40857 18.1251 3.27852 18.0976 3.15836 18.0442C3.03819 17.9908 2.93061 17.9127 2.84259 17.8151C2.75457 17.7174 2.68808 17.6023 2.64745 17.4772C2.60681 17.3521 2.59294 17.2199 2.60673 17.0892L3.66007 7.08917C3.68436 6.8588 3.79309 6.64558 3.96528 6.49063C4.13746 6.33568 4.36092 6.24996 4.59257 6.25H15.4042C15.8842 6.25 16.2867 6.6125 16.3367 7.08917Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -309,6 +319,7 @@ export default function Header() {
               <Link
                 key={link.label}
                 to={link.href}
+                onClick={link.href === '/' ? handleHomeClick : undefined}
                 className="font-primary font-medium text-[14px] transition-colors duration-300 hover:opacity-70"
                 style={{ color: scrolled ? '#0F172A' : 'rgba(255,255,255,0.90)' }}
               >

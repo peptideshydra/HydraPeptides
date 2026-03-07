@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
+import { useCurrency } from '../context/CurrencyContext'
 
 function CloseIcon() {
   return (
@@ -48,6 +49,7 @@ export default function CartDrawer() {
     removeItem, updateQuantity, closeCart,
     totalItems, subtotal, total,
   } = useCart()
+  const { fmt } = useCurrency()
 
   const [visible, setVisible] = useState(false)
   const [animating, setAnimating] = useState(false)
@@ -203,7 +205,7 @@ export default function CartDrawer() {
 
                       {/* Price */}
                       <div className="font-primary font-semibold text-[14px] text-[#22282F]">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        {fmt(item.price * item.quantity)}
                       </div>
                     </div>
                   </div>
@@ -219,7 +221,7 @@ export default function CartDrawer() {
             {/* Order summary */}
             <div className="flex items-center justify-between py-2">
               <span className="font-primary font-semibold text-[14px] text-[#22282F]">Subtotal</span>
-              <span className="font-primary font-semibold text-[14px] text-[#22282F]">${subtotal.toFixed(2)}</span>
+              <span className="font-primary font-semibold text-[14px] text-[#22282F]">{fmt(subtotal)}</span>
             </div>
 
             <div className="py-1.5">
@@ -236,7 +238,7 @@ export default function CartDrawer() {
               style={{ background: '#16A1C5' }}
             >
               <span>Proceed to Checkout</span>
-              <span>${total.toFixed(2)}</span>
+              <span>{fmt(total)}</span>
             </Link>
 
             {/* Payment icons */}

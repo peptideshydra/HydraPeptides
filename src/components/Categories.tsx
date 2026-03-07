@@ -15,18 +15,6 @@ const categories: Category[] = [
     image: 'https://beyond-peptides.com/wp-content/uploads/2025/10/Peptide-Bottle.webp',
     link: '/product-category/peptide-products/',
   },
-  {
-    name: 'Tablets',
-    dbCategory: 'Tablets',
-    image: 'https://beyond-peptides.com/wp-content/uploads/2025/10/Tablets.webp',
-    link: '/product-category/tablets/',
-  },
-  {
-    name: 'Cosmetics and Topicals',
-    dbCategory: 'Cosmetics and Topicals',
-    image: 'https://beyond-peptides.com/wp-content/uploads/2025/10/Cosmetics-and-Topicals.webp',
-    link: '/product-category/cosmetics-tropicals/',
-  },
 ];
 
 function CategoryCard({ category, count }: { category: Category; count: number | null }) {
@@ -80,7 +68,7 @@ export default function Categories() {
           High-Purity Compounds for Every Study
         </h2>
 
-        <div className="grid grid-cols-3 gap-4 max-w-[900px] mx-auto max-[900px]:grid-cols-2 max-[480px]:grid-cols-1">
+        <div className="flex justify-center max-w-[900px] mx-auto">
           {categories.map((cat) => (
             <CategoryCard key={cat.name} category={cat} count={countFor(cat.dbCategory)} />
           ))}

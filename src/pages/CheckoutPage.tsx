@@ -4,6 +4,7 @@ import { ChevronRight } from 'lucide-react'
 import emailjs from '@emailjs/browser'
 import ShopNav from '../components/ShopNav'
 import { useCart } from '../context/CartContext'
+import { useCurrency } from '../context/CurrencyContext'
 import { COUNTRIES, getCountryName } from '../data/countries'
 import { createOrder } from '../lib/supabase'
 
@@ -146,6 +147,7 @@ export default function CheckoutPage() {
   const navigate = useNavigate()
   const formRef = useRef<HTMLFormElement>(null)
   const { items, subtotal, total, couponDiscount, coupon, applyCoupon, clearCart } = useCart()
+  const { fmt } = useCurrency()
   const [showCoupon, setShowCoupon] = useState(false)
   const [shipToDifferent, setShipToDifferent] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState('bacs')
@@ -367,7 +369,7 @@ export default function CheckoutPage() {
                             <strong className="text-[#22282F]"> × {item.quantity}</strong>
                           </td>
                           <td className="py-3 text-right font-semibold text-[14px] text-[#22282F]">
-                            ${(item.price * item.quantity).toFixed(2)}
+                            {fmt(item.price * item.quantity)}
                           </td>
                         </tr>
                       ))}
@@ -375,12 +377,12 @@ export default function CheckoutPage() {
                     <tfoot>
                       <tr className="border-b border-[#e5e7eb]">
                         <th className="py-3 text-left font-semibold text-[14px] text-[#22282F]">Subtotal</th>
-                        <td className="py-3 text-right font-semibold text-[14px] text-[#22282F]">${subtotal.toFixed(2)}</td>
+                        <td className="py-3 text-right font-semibold text-[14px] text-[#22282F]">{fmt(subtotal)}</td>
                       </tr>
                       {coupon && couponDiscount > 0 && (
                         <tr className="border-b border-[#e5e7eb]">
                           <th className="py-3 text-left font-semibold text-[14px] text-[#22282F]">Coupon ({coupon})</th>
-                          <td className="py-3 text-right text-[14px] text-[#16A1C5]">-${couponDiscount.toFixed(2)}</td>
+                          <td className="py-3 text-right text-[14px] text-[#16A1C5]">-{fmt(couponDiscount)}</td>
                         </tr>
                       )}
                       <tr className="border-b border-[#e5e7eb]">
@@ -388,13 +390,13 @@ export default function CheckoutPage() {
                         <td className="py-3 text-right text-[14px] text-[#444B53]">
                           <label className="flex items-center justify-end gap-2 cursor-pointer">
                             <input type="radio" name="shipping_method" value="flat_rate" defaultChecked className="w-4 h-4" />
-                            Flat rate: <span className="font-semibold text-[#22282F]">${SHIPPING_RATE.toFixed(2)}</span>
+                            Flat rate: <span className="font-semibold text-[#22282F]">{fmt(SHIPPING_RATE)}</span>
                           </label>
                         </td>
                       </tr>
                       <tr>
                         <th className="py-4 text-left font-semibold text-[16px] text-[#22282F]">Total</th>
-                        <td className="py-4 text-right font-bold text-[16px] text-[#22282F]">${totalWithShipping.toFixed(2)}</td>
+                        <td className="py-4 text-right font-bold text-[16px] text-[#22282F]">{fmt(totalWithShipping)}</td>
                       </tr>
                     </tfoot>
                   </table>

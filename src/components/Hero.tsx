@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Heart, ArrowRight } from 'lucide-react';
+import { useCurrency } from '../context/CurrencyContext';
 import { useFeaturedProduct } from '../hooks/useProducts';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -9,6 +11,7 @@ export default function Hero() {
   const { product: featuredProduct } = useFeaturedProduct();
   const { addItem } = useCart();
   const { isInWishlist, toggleItem } = useWishlist();
+  const { fmt } = useCurrency();
   const [activeDosageIdx, setActiveDosageIdx] = useState(0);
   const [activeVialIdx, setActiveVialIdx] = useState(0);
 
@@ -199,7 +202,7 @@ export default function Hero() {
 
                   <div className="py-3">
                     <span className="font-primary text-[18px] font-bold text-white">
-                      ${price.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      {fmt(price)}
                     </span>
                     <span className="text-[13px] font-normal text-white/50 ml-1.5">incl. VAT</span>
                   </div>
@@ -227,8 +230,8 @@ export default function Hero() {
             </div>
             )}
 
-            <a
-              href="#"
+            <Link
+              to="/shop/"
               className="hidden lg:inline-flex items-center gap-4 px-6 py-3.5 rounded-full border border-white/25 bg-white/[0.08] text-white font-primary font-semibold text-[14px] cursor-pointer transition-all duration-300 hover:bg-white/[0.14] hover:border-white/40 animate-fade-in-up-delay mb-10"
             >
               <div>
@@ -240,7 +243,7 @@ export default function Hero() {
               <div className="w-9 h-9 rounded-full border border-white/20 bg-white/[0.06] flex items-center justify-center">
                 <ArrowRight className="w-4 h-4 text-white" />
               </div>
-            </a>
+            </Link>
 
             <p className="font-body text-[13px] text-white/35 leading-[1.65] max-w-[460px] animate-fade-in-up-delay">
               For research purposes only. Not intended for human consumption. For use by professionals only.
@@ -356,7 +359,7 @@ export default function Hero() {
 
                 <div className="py-3">
                   <span className="font-primary text-[18px] font-bold text-white">
-                    ${price.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    {fmt(price)}
                   </span>
                   <span className="text-[13px] font-normal text-white/50 ml-1.5">incl. VAT</span>
                 </div>

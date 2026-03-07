@@ -4,6 +4,7 @@ import { ChevronRight, ChevronUp, ChevronDown } from 'lucide-react'
 import ShopNav from '../components/ShopNav'
 import { useShopProducts } from '../hooks/useProducts'
 import { useWishlist } from '../context/WishlistContext'
+import { useCurrency } from '../context/CurrencyContext'
 import type { ProductRow } from '../lib/supabase'
 import { Heart } from 'lucide-react'
 
@@ -178,6 +179,7 @@ function FilterAccordion({ title, defaultOpen, children }: { title: string; defa
 function ProductCard({ product }: { product: ProductRow }) {
   const [hovered, setHovered] = useState(false)
   const { isInWishlist, toggleItem } = useWishlist()
+  const { fmt } = useCurrency()
 
   const v = product.variations?.[0]
   const vial = v?.vials?.[0]
@@ -241,11 +243,11 @@ function ProductCard({ product }: { product: ProductRow }) {
         <div className="flex items-center gap-2">
           {product.old_price && (
             <span className="font-primary text-[13px] text-[#8494A6] line-through">
-              {product.old_price.toFixed(2)}€
+              {fmt(product.old_price)}
             </span>
           )}
           <span className="font-primary font-semibold text-[15px] text-[#22282F]">
-            {product.price.toFixed(2)}€
+            {fmt(product.price)}
           </span>
           <span className="font-primary text-[11px] text-[#8494A6]">incl. VAT</span>
         </div>

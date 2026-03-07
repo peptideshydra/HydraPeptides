@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useCurrency, type CurrencyCode } from '../context/CurrencyContext';
 
 const features = [
   {
@@ -62,6 +63,7 @@ function ArrowIcon() {
 
 export default function Footer() {
   const [email, setEmail] = useState('');
+  const { currency, setCurrency } = useCurrency();
 
   return (
     <footer
@@ -313,12 +315,15 @@ export default function Footer() {
                   borderRadius: 6,
                   color: 'rgba(255,255,255,0.6)',
                   fontSize: 13,
-                  padding: '6px 10px',
+                  padding: '6px 12px',
+                  minWidth: 100,
                 }}
-                defaultValue="USD"
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
               >
-                <option value="USD">USD, $</option>
-                <option value="EUR">EUR, &euro;</option>
+                <option value="USD" style={{ background: '#1a2030', color: '#fff' }}>USD ($)</option>
+                <option value="EUR" style={{ background: '#1a2030', color: '#fff' }}>EUR (€)</option>
+                <option value="AUD" style={{ background: '#1a2030', color: '#fff' }}>AUD (A$)</option>
               </select>
             </div>
 

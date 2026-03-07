@@ -6,6 +6,7 @@ import ShopNav from '../components/ShopNav'
 import { getCountryName } from '../data/countries'
 import { fetchOrderByNumber, type OrderWithItems } from '../lib/supabase'
 import { InvoicePDF } from '../components/InvoicePDF'
+import { useCurrency } from '../context/CurrencyContext'
 
 function OrderReceivedHero() {
   return (
@@ -86,6 +87,7 @@ export default function OrderReceivedPage() {
   const [loading, setLoading] = useState(true)
   const [fetchError, setFetchError] = useState<string | null>(null)
   const [pdfGenerating, setPdfGenerating] = useState(false)
+  const { fmt } = useCurrency()
 
   async function downloadInvoice(o: OrderWithItems) {
     setPdfGenerating(true)
@@ -150,7 +152,7 @@ export default function OrderReceivedPage() {
                 <li>Order number: <strong className="text-[#22282F]">{order.order_number}</strong></li>
                 <li>Date: <strong className="text-[#22282F]">{formatDate(order.created_at)}</strong></li>
                 <li>Email: <strong className="text-[#22282F]">{order.billing_email}</strong></li>
-                <li>Total: <strong className="text-[#22282F]">USD ${Number(order.total).toFixed(2)}</strong></li>
+                <li>Total: <strong className="text-[#22282F]">{fmt(Number(order.total))}</strong></li>
                 <li>Payment method: <strong className="text-[#22282F]">{order.payment_method}</strong></li>
               </ul>
 
@@ -195,7 +197,7 @@ export default function OrderReceivedPage() {
                           <strong className="text-[#22282F]">× {item.quantity}</strong>
                         </td>
                         <td className="py-3 text-right font-semibold text-[14px] text-[#22282F]">
-                          USD ${Number(item.total).toFixed(2)}
+                          {fmt(Number(item.total))}
                         </td>
                       </tr>
                     ))}
@@ -216,18 +218,18 @@ export default function OrderReceivedPage() {
                     </tr>
                     <tr className="border-b border-[#e5e7eb]">
                       <th scope="row" className="text-left py-3 font-semibold text-[14px] text-[#22282F]">Subtotal:</th>
-                      <td className="py-3 text-right text-[14px] text-[#444B53]">USD ${Number(order.subtotal).toFixed(2)}</td>
+                      <td className="py-3 text-right text-[14px] text-[#444B53]">{fmt(Number(order.subtotal))}</td>
                     </tr>
                     {order.coupon_code && Number(order.coupon_discount) > 0 && (
                       <tr className="border-b border-[#e5e7eb]">
                         <th scope="row" className="text-left py-3 font-semibold text-[14px] text-[#22282F]">Coupon ({order.coupon_code}):</th>
-                        <td className="py-3 text-right text-[14px] text-[#16A1C5]">-${Number(order.coupon_discount).toFixed(2)}</td>
+                        <td className="py-3 text-right text-[14px] text-[#16A1C5]">-{fmt(Number(order.coupon_discount))}</td>
                       </tr>
                     )}
                     <tr className="border-b border-[#e5e7eb]">
                       <th scope="row" className="text-left py-3 font-semibold text-[14px] text-[#22282F]">Shipping:</th>
                       <td className="py-3 text-right text-[14px] text-[#444B53]">
-                        ${Number(order.shipping_cost).toFixed(2)} <small className="text-[#6B7785]">via Flat rate</small>
+                        {fmt(Number(order.shipping_cost))} <small className="text-[#6B7785]">via Flat rate</small>
                       </td>
                     </tr>
                     <tr className="border-b border-[#e5e7eb]">
@@ -236,7 +238,7 @@ export default function OrderReceivedPage() {
                     </tr>
                     <tr>
                       <th scope="row" className="text-left py-4 font-semibold text-[16px] text-[#22282F]">Total:</th>
-                      <td className="py-4 text-right font-bold text-[16px] text-[#22282F]">USD ${Number(order.total).toFixed(2)}</td>
+                      <td className="py-4 text-right font-bold text-[16px] text-[#22282F]">{fmt(Number(order.total))}</td>
                     </tr>
                   </tfoot>
                 </table>

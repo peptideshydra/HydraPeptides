@@ -23,6 +23,7 @@ import AdminOrdersPage from './pages/admin/AdminOrdersPage'
 import { CartProvider } from './context/CartContext'
 import { WishlistProvider } from './context/WishlistContext'
 import { MobileMenuProvider } from './context/MobileMenuContext'
+import { CurrencyProvider } from './context/CurrencyContext'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -57,6 +58,7 @@ function GlobalWidgets() {
 
 function App() {
   return (
+    <CurrencyProvider>
     <CartProvider>
       <WishlistProvider>
         <MobileMenuProvider>
@@ -99,6 +101,7 @@ function App() {
         </MobileMenuProvider>
       </WishlistProvider>
     </CartProvider>
+    </CurrencyProvider>
   )
 }
 

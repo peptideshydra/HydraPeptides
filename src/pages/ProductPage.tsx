@@ -7,6 +7,7 @@ import PeptideProducts from '../components/PeptideProducts'
 import { useProduct, useProductDetails } from '../hooks/useProducts'
 import { useCart } from '../context/CartContext'
 import { useWishlist } from '../context/WishlistContext'
+import { useCurrency } from '../context/CurrencyContext'
 import type { ProductRow, ProductDetailRow } from '../lib/supabase'
 
 const researchIcon = (
@@ -185,6 +186,7 @@ function ProductDetail({ product }: { product: ProductRow }) {
   const { addItem } = useCart()
   const { details } = useProductDetails(product.id)
   const { isInWishlist, toggleItem } = useWishlist()
+  const { fmt } = useCurrency()
   const [selectedDosageIdx, setSelectedDosageIdx] = useState(0)
   const [selectedVialIdx, setSelectedVialIdx] = useState(0)
   const [quantity, setQuantity] = useState(1)
@@ -262,7 +264,7 @@ function ProductDetail({ product }: { product: ProductRow }) {
 
             <div className="mb-1">
               <span className="font-primary font-bold text-[#22282F]" style={{ fontSize: 'clamp(24px, 3vw, 32px)' }}>
-                {currentPrice.toFixed(2)} €
+                {fmt(currentPrice)}
               </span>
             </div>
             {product.price_per_unit && (
