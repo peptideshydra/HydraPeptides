@@ -5,7 +5,6 @@ import PromoBanner from '../components/PromoBanner'
 import NewProducts from '../components/NewProducts'
 import EverythingYouNeed from '../components/EverythingYouNeed'
 import PeptideProducts from '../components/PeptideProducts'
-import Transparency from '../components/Transparency'
 import StorageTips from '../components/StorageTips'
 
 export default function HomePage() {
@@ -18,7 +17,6 @@ export default function HomePage() {
       <NewProducts />
       <EverythingYouNeed />
       <PeptideProducts />
-      <Transparency />
       <StorageTips />
     </>
   )
