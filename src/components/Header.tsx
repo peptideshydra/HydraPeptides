@@ -6,6 +6,7 @@ import { useCurrency } from '../context/CurrencyContext';
 const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'Our Products', href: '/shop/', hasMega: true },
+  { label: 'Calculator', href: '/calculator/' },
   { label: 'About', href: '/about-us/' },
   { label: 'FAQ', href: '/faq/' },
 ];
@@ -137,13 +138,14 @@ export default function Header() {
     <div
       className="fixed left-0 right-0 z-[1000] transition-all duration-300"
       style={{
-        top: scrolled ? 0 : 0,
-        background: scrolled
-          ? 'rgba(255,255,255,0.97)'
-          : 'transparent',
+        top: 0,
+        transform: scrolled ? 'translateY(0)' : 'translateY(-100%)',
+        opacity: scrolled ? 1 : 0,
+        pointerEvents: scrolled ? 'auto' : 'none',
+        background: 'rgba(255,255,255,0.97)',
         boxShadow: scrolled ? '0 4px 30px rgba(0,0,0,0.08)' : 'none',
-        backdropFilter: scrolled ? 'blur(12px)' : 'none',
-        WebkitBackdropFilter: scrolled ? 'blur(12px)' : 'none',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
       }}
     >
       <div
@@ -157,11 +159,7 @@ export default function Header() {
         {/* Logo */}
         <Link to="/" className="flex items-center shrink-0" onClick={handleHomeClick}>
           <img
-            src={
-              scrolled
-                ? '/logo-u-boji.png'
-                : '/beli-logo.png'
-            }
+            src="/logo-u-boji.png"
             alt="Hydra Peptides"
             className="transition-opacity duration-300"
             style={{ height: 70 }}
@@ -181,10 +179,10 @@ export default function Header() {
                 <Link
                   to={link.href}
                   className="font-primary font-medium text-[14px] flex items-center gap-1.5 transition-colors duration-300"
-                  style={{ color: scrolled ? '#0F172A' : 'rgba(255,255,255,0.90)' }}
+                  style={{ color: '#0F172A' }}
                 >
                   {link.label}
-                  <ChevronDown scrolled={scrolled} />
+                  <ChevronDown scrolled={true} />
                 </Link>
 
                 {/* Mega menu — full-width dropdown */}
@@ -321,7 +319,7 @@ export default function Header() {
                 to={link.href}
                 onClick={link.href === '/' ? handleHomeClick : undefined}
                 className="font-primary font-medium text-[14px] transition-colors duration-300 hover:opacity-70"
-                style={{ color: scrolled ? '#0F172A' : 'rgba(255,255,255,0.90)' }}
+                style={{ color: '#0F172A' }}
               >
                 {link.label}
               </Link>
@@ -332,13 +330,13 @@ export default function Header() {
         {/* Right icons */}
         <div className="flex items-center gap-2">
           <a href="/my-account/" className="cursor-pointer transition-transform hover:scale-105">
-            <AccountIcon scrolled={scrolled} />
+            <AccountIcon scrolled={true} />
           </a>
           <a href="/wishlist/" className="cursor-pointer transition-transform hover:scale-105">
-            <WishlistIcon scrolled={scrolled} />
+            <WishlistIcon scrolled={true} />
           </a>
           <button onClick={openCart} className="relative cursor-pointer transition-transform hover:scale-105">
-            <CartIcon scrolled={scrolled} />
+            <CartIcon scrolled={true} />
             <span
               className="absolute flex items-center justify-center font-primary font-semibold"
               style={{

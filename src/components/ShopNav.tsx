@@ -7,6 +7,7 @@ import { useMobileMenu } from '../context/MobileMenuContext'
 const navItems = [
   { label: 'Home', to: '/' },
   { label: 'Our Products', to: '/shop/' },
+  { label: 'Calculator', to: '/calculator/' },
   { label: 'About', to: '/about-us/' },
   { label: 'FAQ', to: '/faq/' },
 ]

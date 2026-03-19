@@ -102,6 +102,7 @@ export default function MobileMenuDrawer() {
               <Link to="/shop/" onClick={closeMenu} className={itemClass}>
                 <span>Our Products</span>
               </Link>
+              <Link to="/calculator/" onClick={closeMenu} className={itemClass}><span>Calculator</span></Link>
               <Link to="/about-us/" onClick={closeMenu} className={itemClass}><span>About</span></Link>
               <Link to="/faq/" onClick={closeMenu} className={itemClass}><span>FAQ</span></Link>
             </div>

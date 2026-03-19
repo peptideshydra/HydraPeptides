@@ -15,6 +15,7 @@ import ProductPage from './pages/ProductPage'
 import WishlistPage from './pages/WishlistPage'
 import CheckoutPage from './pages/CheckoutPage'
 import OrderReceivedPage from './pages/OrderReceivedPage'
+import CalculatorPage from './pages/CalculatorPage'
 import AdminLoginPage from './pages/admin/AdminLoginPage'
 import AdminLayout from './pages/admin/AdminLayout'
 import AdminProductsPage from './pages/admin/AdminProductsPage'
@@ -93,6 +94,8 @@ function App() {
             <Route path="/checkout/" element={<CheckoutPage />} />
             <Route path="/checkout/order-received" element={<OrderReceivedPage />} />
             <Route path="/checkout/order-received/" element={<OrderReceivedPage />} />
+            <Route path="/calculator" element={<CalculatorPage />} />
+            <Route path="/calculator/" element={<CalculatorPage />} />
           </Route>
 
           {/* Fallback */}

@@ -12,7 +12,7 @@ const categories: Category[] = [
   {
     name: 'Peptides',
     dbCategory: 'All Peptides',
-    image: 'https://beyond-peptides.com/wp-content/uploads/2025/10/Peptide-Bottle.webp',
+    image: 'https://eqccyxktkeuoqcerfmdi.supabase.co/storage/v1/object/public/product-images/1772444143496-ks9g271196.png',
     link: '/product-category/peptide-products/',
   },
 ];
@@ -37,7 +37,7 @@ function CategoryCard({ category, count }: { category: Category; count: number |
         <img
           src={category.image}
           alt={category.name}
-          className="w-full max-w-[200px] h-auto object-contain transition-transform duration-300"
+          className="w-full max-w-[280px] h-auto object-contain transition-transform duration-300"
           style={{ transform: hovered ? 'scale(1.05)' : 'scale(1)' }}
           loading="lazy"
         />

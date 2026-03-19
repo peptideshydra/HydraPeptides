@@ -4,11 +4,12 @@ import { useCart } from '../context/CartContext'
 import { useWishlist } from '../context/WishlistContext'
 import { useMobileMenu } from '../context/MobileMenuContext'
 
-type NavLabel = 'Home' | 'Our Products' | 'About' | 'FAQ'
+type NavLabel = 'Home' | 'Our Products' | 'Calculator' | 'About' | 'FAQ'
 
 const navItems: { label: NavLabel; to: string }[] = [
   { label: 'Home', to: '/' },
   { label: 'Our Products', to: '/shop/' },
+  { label: 'Calculator', to: '/calculator/' },
   { label: 'About', to: '/about-us/' },
   { label: 'FAQ', to: '/faq/' },
 ]
