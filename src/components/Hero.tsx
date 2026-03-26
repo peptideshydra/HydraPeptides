@@ -20,6 +20,19 @@ export default function Hero() {
   const currentVial = currentVariation?.vials?.[activeVialIdx];
   const price = currentVial?.price ?? featuredProduct?.price ?? 0;
 
+  const isOnSale =
+    !!featuredProduct &&
+    (featuredProduct.old_price != null ||
+      (featuredProduct.sale_badge != null && featuredProduct.sale_badge.trim() !== ''))
+  const saleBadgeText =
+    featuredProduct?.sale_badge?.trim() || 'Sale'
+
+  const oldPrice = featuredProduct?.old_price ?? null
+  const discountPct =
+    oldPrice != null && oldPrice > 0 && price < oldPrice
+      ? Math.round((1 - price / oldPrice) * 100)
+      : null
+
   return (
     <section
       className="relative overflow-hidden min-h-screen flex flex-col items-center"
@@ -105,9 +118,16 @@ export default function Hero() {
                 }}
               >
                 <div className="relative flex justify-center items-center px-6 pt-8 pb-4">
-                  <span className="absolute top-5 left-5 z-20 px-3 py-1.5 rounded-[6px] border border-white/[0.12] font-primary text-[11px] font-semibold text-white tracking-wider uppercase">
-                    BESTSELLER
-                  </span>
+                  <div className="absolute top-5 left-5 z-20 flex flex-col gap-2 items-start">
+                    <span className="px-3 py-1.5 rounded-[6px] border border-white/[0.12] font-primary text-[11px] font-semibold text-white tracking-wider uppercase">
+                      BESTSELLER
+                    </span>
+                    {isOnSale && (
+                      <span className="px-3 py-1.5 rounded-[6px] border border-white/[0.12] font-primary text-[11px] font-semibold text-white tracking-wider uppercase bg-[#C85625]/90 border-[#C85625]/40">
+                        {saleBadgeText}
+                      </span>
+                    )}
+                  </div>
                   <button
                     onClick={() => featuredProduct && currentVariation && currentVial && toggleItem({
                       slug: featuredProduct.slug,
@@ -201,10 +221,22 @@ export default function Hero() {
                   )}
 
                   <div className="py-3">
-                    <span className="font-primary text-[18px] font-bold text-white">
-                      {fmt(price)}
-                    </span>
-                    <span className="text-[13px] font-normal text-white/50 ml-1.5">incl. VAT</span>
+                    <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                      <span className="font-primary text-[18px] font-bold text-white">
+                        {fmt(price)}
+                      </span>
+                      {oldPrice != null && (
+                        <span className="font-primary text-[15px] text-white/45 line-through">
+                          {fmt(oldPrice)}
+                        </span>
+                      )}
+                      <span className="text-[13px] font-normal text-white/50">incl. VAT</span>
+                    </div>
+                    {discountPct != null && discountPct > 0 && (
+                      <p className="mt-1.5 font-primary text-[12px] font-semibold text-[#7ee8ff] tracking-wide">
+                        {discountPct}% off
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -262,9 +294,16 @@ export default function Hero() {
               }}
             >
               <div className="relative flex justify-center items-center px-6 pt-8 pb-4">
-                <span className="absolute top-5 left-5 z-20 px-3 py-1.5 rounded-[6px] border border-white/[0.12] font-primary text-[11px] font-semibold text-white tracking-wider uppercase">
-                  BESTSELLER
-                </span>
+                <div className="absolute top-5 left-5 z-20 flex flex-col gap-2 items-start">
+                  <span className="px-3 py-1.5 rounded-[6px] border border-white/[0.12] font-primary text-[11px] font-semibold text-white tracking-wider uppercase">
+                    BESTSELLER
+                  </span>
+                  {isOnSale && (
+                    <span className="px-3 py-1.5 rounded-[6px] border border-white/[0.12] font-primary text-[11px] font-semibold text-white tracking-wider uppercase bg-[#C85625]/90 border-[#C85625]/40">
+                      {saleBadgeText}
+                    </span>
+                  )}
+                </div>
                 <button
                   onClick={() => featuredProduct && currentVariation && currentVial && toggleItem({
                     slug: featuredProduct.slug,
@@ -358,10 +397,22 @@ export default function Hero() {
                 )}
 
                 <div className="py-3">
-                  <span className="font-primary text-[18px] font-bold text-white">
-                    {fmt(price)}
-                  </span>
-                  <span className="text-[13px] font-normal text-white/50 ml-1.5">incl. VAT</span>
+                  <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                    <span className="font-primary text-[18px] font-bold text-white">
+                      {fmt(price)}
+                    </span>
+                    {oldPrice != null && (
+                      <span className="font-primary text-[15px] text-white/45 line-through">
+                        {fmt(oldPrice)}
+                      </span>
+                    )}
+                    <span className="text-[13px] font-normal text-white/50">incl. VAT</span>
+                  </div>
+                  {discountPct != null && discountPct > 0 && (
+                    <p className="mt-1.5 font-primary text-[12px] font-semibold text-[#7ee8ff] tracking-wide">
+                      {discountPct}% off
+                    </p>
+                  )}
                 </div>
               </div>
 

@@ -4,6 +4,7 @@ import { ChevronRight, X, ShoppingCart, Check } from 'lucide-react'
 import ShopNav from '../components/ShopNav'
 import { useWishlist } from '../context/WishlistContext'
 import { useCart } from '../context/CartContext'
+import { useCurrency } from '../context/CurrencyContext'
 
 function WishlistHero() {
   return (
@@ -103,6 +104,7 @@ function formatDate(iso: string) {
 export default function WishlistPage() {
   const { items, removeItem } = useWishlist()
   const { addItem: addToCart } = useCart()
+  const { fmt } = useCurrency()
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [bulkAction, setBulkAction] = useState('')
 
@@ -245,7 +247,7 @@ export default function WishlistPage() {
                           </Link>
                         </td>
                         <td className="py-4 px-4 text-[14px] font-semibold text-[#22282F]">
-                          ${item.price.toFixed(2)} <small className="text-[#8494A6] font-normal">incl. VAT</small>
+                          {fmt(item.price)} <small className="text-[#8494A6] font-normal">incl. VAT</small>
                         </td>
                         <td className="py-4 px-4 text-[13px] text-[#6B7785] hidden md:table-cell">
                           {formatDate(item.addedAt)}

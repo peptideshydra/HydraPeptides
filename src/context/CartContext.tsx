@@ -13,16 +13,12 @@ export interface CartItem {
 interface CartContextType {
   items: CartItem[]
   isOpen: boolean
-  coupon: string | null
-  couponDiscount: number
   addItem: (item: Omit<CartItem, 'quantity'>, qty?: number) => void
   removeItem: (slug: string, dosage: string, vial: string) => void
   updateQuantity: (slug: string, dosage: string, vial: string, qty: number) => void
   clearCart: () => void
   openCart: () => void
   closeCart: () => void
-  applyCoupon: (code: string) => void
-  removeCoupon: () => void
   totalItems: number
   subtotal: number
   total: number
@@ -34,11 +30,6 @@ function itemKey(slug: string, dosage: string, vial: string) {
   return `${slug}|${dosage}|${vial}`
 }
 
-const COUPON_CODES: Record<string, number> = {
-  newyear10: 10,
-  germanbull: 10,
-}
-
 function loadCart(): CartItem[] {
   try {
     const raw = localStorage.getItem('bp_cart')
@@ -48,27 +39,19 @@ function loadCart(): CartItem[] {
   }
 }
 
-function loadCoupon(): string | null {
-  try {
-    return localStorage.getItem('bp_coupon') || null
-  } catch {
-    return null
-  }
-}
-
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>(loadCart)
   const [isOpen, setIsOpen] = useState(false)
-  const [coupon, setCoupon] = useState<string | null>(loadCoupon)
 
   useEffect(() => {
     localStorage.setItem('bp_cart', JSON.stringify(items))
   }, [items])
 
   useEffect(() => {
-    if (coupon) localStorage.setItem('bp_coupon', coupon)
-    else localStorage.removeItem('bp_coupon')
-  }, [coupon])
+    try {
+      localStorage.removeItem('bp_coupon')
+    } catch { /* noop */ }
+  }, [])
 
   useEffect(() => {
     if (isOpen) {
@@ -112,27 +95,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const openCart = useCallback(() => setIsOpen(true), [])
   const closeCart = useCallback(() => setIsOpen(false), [])
 
-  const applyCoupon = useCallback((code: string) => {
-    const normalized = code.toLowerCase().trim()
-    if (COUPON_CODES[normalized] !== undefined) {
-      setCoupon(normalized)
-    }
-  }, [])
-
-  const removeCoupon = useCallback(() => setCoupon(null), [])
-
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0)
   const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0)
-  const couponDiscount = coupon && COUPON_CODES[coupon]
-    ? Math.round((subtotal * COUPON_CODES[coupon] / 100) * 100) / 100
-    : 0
-  const total = subtotal - couponDiscount
+  const total = subtotal
 
   return (
     <CartContext.Provider value={{
-      items, isOpen, coupon, couponDiscount,
+      items, isOpen,
       addItem, removeItem, updateQuantity, clearCart,
-      openCart, closeCart, applyCoupon, removeCoupon,
+      openCart, closeCart,
       totalItems, subtotal, total,
     }}>
       {children}

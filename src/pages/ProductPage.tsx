@@ -89,7 +89,7 @@ function Accordion({ details }: { details: ProductDetailRow | null }) {
 const faqItems = [
   {
     question: 'Are there customs duties within Europe?',
-    answer: '<p class="font-primary text-[14px] text-[#444B53] leading-relaxed">No, there are generally <strong>no customs duties</strong> on goods shipped within the European Union due to the free movement of goods.</p>',
+    answer: '<p class="font-primary text-[14px] text-[#444B53] leading-relaxed">No, there are generally <strong>no customs duties</strong> on goods shipped due to the free movement of goods.</p>',
   },
   {
     question: 'How can I contact customer support?',
@@ -101,7 +101,7 @@ const faqItems = [
   },
   {
     question: 'What responsibility do consumers have regarding legal compliance?',
-    answer: '<p class="font-primary text-[14px] text-[#444B53] leading-relaxed">Consumers are responsible for ensuring compliance with local laws concerning the purchase, possession, and use of peptides. This includes understanding any prohibitions or restrictions on specific peptides within their country.</p>',
+    answer: '<p class="font-primary text-[14px] text-[#444B53] leading-relaxed">All peptides are sold for <strong>research purposes only</strong>. Purchasers are responsible for ensuring compliance with all applicable local laws and regulations.</p>',
   },
 ]
 
@@ -443,29 +443,6 @@ function ProductDetail({ product }: { product: ProductRow }) {
 
             <div className="lg:hidden mt-8">
               <Accordion details={details} />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Free Antibacterial Water Banner */}
-      <section className="overflow-hidden" style={{ background: '#f8f9fb' }}>
-        <div className="mx-auto" style={{ maxWidth: 1320, padding: '0 20px 60px' }}>
-          <div className="relative rounded-2xl overflow-hidden flex flex-col md:flex-row w-full" style={{ background: '#eef2f6' }}>
-            <div className="absolute top-0 left-0 h-full pointer-events-none" style={{ width: '55%', background: '#e4e9ef', clipPath: 'polygon(0 0, 85% 0, 100% 100%, 0 100%)' }} />
-            <div className="relative z-10 flex-1 flex flex-col justify-center px-8 py-10 md:px-12 md:py-14 lg:px-16">
-              <h5 className="font-primary font-semibold text-[#22282F] mb-3" style={{ fontSize: 'clamp(11px, 1.1vw, 13px)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
-                Ensure Safe Research Every Time
-              </h5>
-              <h2 className="font-primary font-bold text-[#22282F] mb-4" style={{ fontSize: 'clamp(22px, 2.8vw, 32px)', lineHeight: 1.25 }}>
-                <span style={{ color: '#16A1C5' }}>Get Free Antibacterial Water</span><br />with Every Peptide Purchase!
-              </h2>
-              <p className="font-primary text-[#6B7785]" style={{ fontSize: 'clamp(13px, 1.2vw, 15px)', lineHeight: 1.7, maxWidth: 480 }}>
-                This product, along with all of our products, includes free antibacterial water with each unit!
-              </p>
-            </div>
-            <div className="relative z-10 md:w-[45%] shrink-0 flex items-center justify-center overflow-hidden">
-              <img src="https://beyond-peptides.com/wp-content/uploads/2024/09/Mask-group-2.png" alt="Free antibacterial water" className="w-full h-full object-cover" loading="lazy" />
             </div>
           </div>
         </div>

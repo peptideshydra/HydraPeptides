@@ -146,12 +146,10 @@ export interface OrderData {
 export default function CheckoutPage() {
   const navigate = useNavigate()
   const formRef = useRef<HTMLFormElement>(null)
-  const { items, subtotal, total, couponDiscount, coupon, applyCoupon, clearCart } = useCart()
+  const { items, subtotal, total, clearCart } = useCart()
   const { fmt } = useCurrency()
-  const [showCoupon, setShowCoupon] = useState(false)
   const [shipToDifferent, setShipToDifferent] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState('bacs')
-  const [couponInput, setCouponInput] = useState('')
   const [placing, setPlacing] = useState(false)
   const [placeError, setPlaceError] = useState<string | null>(null)
 
@@ -210,8 +208,8 @@ export default function CheckoutPage() {
       shipping_country:    shippingCountry,
       subtotal,
       shipping_cost: SHIPPING_RATE,
-      coupon_code: coupon,
-      coupon_discount: couponDiscount,
+      coupon_code: null,
+      coupon_discount: 0,
       total: totalWithShipping,
       payment_method: paymentLabel,
       order_notes: get('order_comments'),
@@ -257,8 +255,8 @@ export default function CheckoutPage() {
           items_html:             itemsHtml,
           subtotal:               `$${subtotal.toFixed(2)}`,
           shipping_cost:          `$${SHIPPING_RATE.toFixed(2)}`,
-          coupon_code:            coupon || '—',
-          coupon_discount:        couponDiscount > 0 ? `-$${couponDiscount.toFixed(2)}` : '—',
+          coupon_code:            '—',
+          coupon_discount:        '—',
           total:                  `$${totalWithShipping.toFixed(2)}`,
           billing_name:           `${get('billing_first_name')} ${get('billing_last_name')}`,
           billing_company:        get('billing_company') || '—',
@@ -379,12 +377,6 @@ export default function CheckoutPage() {
                         <th className="py-3 text-left font-semibold text-[14px] text-[#22282F]">Subtotal</th>
                         <td className="py-3 text-right font-semibold text-[14px] text-[#22282F]">{fmt(subtotal)}</td>
                       </tr>
-                      {coupon && couponDiscount > 0 && (
-                        <tr className="border-b border-[#e5e7eb]">
-                          <th className="py-3 text-left font-semibold text-[14px] text-[#22282F]">Coupon ({coupon})</th>
-                          <td className="py-3 text-right text-[14px] text-[#16A1C5]">-{fmt(couponDiscount)}</td>
-                        </tr>
-                      )}
                       <tr className="border-b border-[#e5e7eb]">
                         <th className="py-3 text-left font-semibold text-[14px] text-[#22282F]">Shipment 1</th>
                         <td className="py-3 text-right text-[14px] text-[#444B53]">
@@ -400,34 +392,6 @@ export default function CheckoutPage() {
                       </tr>
                     </tfoot>
                   </table>
-
-                  {/* Coupon */}
-                  <div className="mt-6 pt-6 border-t border-[#e5e7eb]">
-                    <p className="text-[#6B7785] text-[14px]">
-                      Have a coupon?{' '}
-                      <button type="button" onClick={() => setShowCoupon(!showCoupon)} className="text-[#16A1C5] hover:underline">
-                        Click here to enter your code
-                      </button>
-                    </p>
-                    {showCoupon && (
-                      <div className="mt-4 flex gap-2">
-                        <input
-                          type="text"
-                          placeholder="Coupon code"
-                          value={couponInput}
-                          onChange={(e) => setCouponInput(e.target.value)}
-                          className="flex-1 h-10 px-3 rounded-lg border border-[#e5e7eb] font-primary text-[14px] outline-none focus:border-[#16A1C5]"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => applyCoupon(couponInput)}
-                          className="h-10 px-6 rounded-lg bg-[#22282F] text-white font-primary font-semibold text-[14px] hover:bg-[#333a42] transition-colors"
-                        >
-                          Apply
-                        </button>
-                      </div>
-                    )}
-                  </div>
 
                   {/* Payment methods */}
                   <div className="mt-6 pt-6 border-t border-[#e5e7eb]">

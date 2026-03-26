@@ -6,6 +6,7 @@ import { Navigation, Autoplay } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 import type { ProductRow } from '../lib/supabase';
 import { useWishlist } from '../context/WishlistContext';
+import { useCurrency } from '../context/CurrencyContext';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
@@ -38,6 +39,7 @@ function ShoppingBagIcon() {
 function CarouselProductCard({ product }: { product: ProductRow }) {
   const [hovered, setHovered] = useState(false);
   const { isInWishlist, toggleItem } = useWishlist();
+  const { fmt } = useCurrency();
   const link = `/product/${product.slug}/`;
 
   const v = product.variations?.[0];
@@ -91,9 +93,9 @@ function CarouselProductCard({ product }: { product: ProductRow }) {
           style={{ transform: hovered ? 'translateY(-100%)' : 'translateY(0)' }}
         >
           <div className="flex items-center gap-2">
-            <span className="text-[#22282F] text-[14px] font-semibold">${product.price.toFixed(2)}</span>
-            {product.old_price && (
-              <span className="text-[#8494A6] text-[13px] line-through">${product.old_price.toFixed(2)}</span>
+            <span className="text-[#22282F] text-[14px] font-semibold">{fmt(price)}</span>
+            {product.old_price != null && (
+              <span className="text-[#8494A6] text-[13px] line-through">{fmt(product.old_price)}</span>
             )}
           </div>
           <Link to={link} className="flex items-center justify-center w-10 h-10 rounded-full border border-[#DBDFE5] hover:border-[#22282F] transition-colors" aria-label="Add to bag">

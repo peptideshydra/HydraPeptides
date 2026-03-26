@@ -1,7 +1,6 @@
 import Hero from '../components/Hero'
 import BestSellers from '../components/BestSellers'
 import Categories from '../components/Categories'
-import PromoBanner from '../components/PromoBanner'
 import NewProducts from '../components/NewProducts'
 import EverythingYouNeed from '../components/EverythingYouNeed'
 import PeptideProducts from '../components/PeptideProducts'
@@ -13,7 +12,6 @@ export default function HomePage() {
       <Hero />
       <BestSellers />
       <Categories />
-      <PromoBanner />
       <NewProducts />
       <EverythingYouNeed />
       <PeptideProducts />

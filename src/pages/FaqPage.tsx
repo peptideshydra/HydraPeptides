@@ -100,7 +100,7 @@ const faqItems = [
   { q: 'Do you include test certificates with your products?', a: 'Yes, each product package includes a <b>test certificate</b> specific to the batch. This certificate verifies the chemical purity and content of the peptides, ensuring full transparency and safety in research.' },
   { q: 'Do your peptides come with antibacterial water?', a: 'Yes, every peptide vial is accompanied by a <b>2ml vial of antibacterial injection water</b>. This allows for sterile preparation suitable for research use.' },
   { q: 'How are the peptides stored and shipped?', a: 'We store all peptides under optimal conditions (<b>2-8°C</b>) and protect them from light and vibrations until dispatch. To ensure maximum stability during transport, all peptides are shipped in their <b>lyophilized (dry) form</b>, not dissolved in water.' },
-  { q: 'Are there customs duties within Europe?', a: 'No, there are generally <b>no customs duties</b> on goods shipped within the European Union due to the free movement of goods.' },
+  { q: 'Are there customs duties within Europe?', a: 'No, there are generally <b>no customs duties</b> on goods shipped due to the free movement of goods.' },
   { q: 'How can I contact customer support?', a: 'You can reach our customer support team via our <b>email address (<a href="mailto:contact@hydrapeptides.com" class="text-[#0a9edd] hover:underline">contact@hydrapeptides.com</a>)</b>. We are also working on providing support through <b>WhatsApp</b> in the near future.' },
   { q: 'Is my data secure with you?', a: 'Absolutely. We prioritize the security of your personal data by implementing high IT security standards.' },
   { q: 'Do you provide usage guidelines?', a: 'Yes, we provide clear usage guidelines for <b>research purposes only</b>. Please note that our products are not intended for human consumption.' },
@@ -112,7 +112,7 @@ const faqItems = [
   { q: 'Are there any interactive resources available for storage and handling?', a: 'We are developing an interactive guide where you can learn about best practices for storing and handling peptides. Stay tuned for updates via our newsletter.' },
   { q: 'What measures do you take to ensure product security and trust?', a: '<ul class="list-disc pl-5 space-y-1"><li><b>Trust Badges and Certifications:</b> We display relevant certifications to assure you of our commitment to quality.</li><li><b>Data Security:</b> We employ high IT security standards to protect your personal information.</li><li><b>Legal Compliance:</b> We ensure all products and practices comply with legal standards.</li></ul>' },
   { q: 'Are there any customs considerations for international orders?', a: 'For shipments within the European Union, there are generally no customs duties. For international orders outside the EU, customers are responsible for any import duties, taxes, or customs regulations applicable in their country.' },
-  { q: 'What responsibility do consumers have regarding legal compliance?', a: 'Consumers are responsible for ensuring compliance with local laws concerning the purchase, possession, and use of peptides. This includes understanding any prohibitions or restrictions on specific peptides within their country.' },
+  { q: 'What responsibility do consumers have regarding legal compliance?', a: 'All peptides are sold for <b>research purposes only</b>. Purchasers are responsible for ensuring compliance with all applicable local laws and regulations.' },
 ]
 
 function FaqContent() {
